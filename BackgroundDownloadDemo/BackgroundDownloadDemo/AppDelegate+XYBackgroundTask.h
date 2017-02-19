@@ -13,5 +13,6 @@ extern NSString *const XYDownloadProgressNotification;
 
 @interface AppDelegate (XYBackgroundTask) <XYBackgroundDownloadProtocol>
 
+@property (nonatomic, weak) id<XYBackgroundDownloadProtocol> backgroundDownloadDelegate;
 
 @end

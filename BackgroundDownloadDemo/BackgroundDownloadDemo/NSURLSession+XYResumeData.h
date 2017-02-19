@@ -11,7 +11,7 @@
 @interface NSURLSession (XYResumeData)
 
 /// 根据resumeData继续下载任务
-/// 针对iOS对resumeData进行处理
+/// 针对iOS10以后对resumeData进行处理
 - (NSURLSessionDownloadTask *)xy_downloadTaskWithResumeData:(NSData *)resumeData;
 
 @end

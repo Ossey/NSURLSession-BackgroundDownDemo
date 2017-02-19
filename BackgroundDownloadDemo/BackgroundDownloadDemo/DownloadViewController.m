@@ -9,7 +9,7 @@
 #import "DownloadViewController.h"
 #import "AppDelegate+XYBackgroundTask.h"
 
-@interface DownloadViewController ()
+@interface DownloadViewController () <XYBackgroundDownloadProtocol>
 
 @property (weak, nonatomic) IBOutlet UILabel *progressLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
@@ -23,16 +23,27 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateDownloadProgress:) name:XYDownloadProgressNotification object:nil];
+    // 监听通知的方式 获取下载进度
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateDownloadProgress:) name:XYDownloadProgressNotification object:nil];
+    
+    
 }
 
-#pragma mark - notify 
-- (void)updateDownloadProgress:(NSNotification *)note {
-    CGFloat fProgress = [note.object floatValue];
+#pragma mark - XYBackgroundDownloadProtocol
+- (void)xy_backgroundDownload:(id)objc progress:(NSString *)progress {
+    CGFloat fProgress = [progress floatValue];
     
     self.progressLabel.text = [NSString stringWithFormat:@"%.2f%%",fProgress * 100];
     self.progressView.progress = fProgress;
 }
+
+#pragma mark - notify 
+//- (void)updateDownloadProgress:(NSNotification *)note {
+//    CGFloat fProgress = [note.object floatValue];
+//    
+//    self.progressLabel.text = [NSString stringWithFormat:@"%.2f%%",fProgress * 100];
+//    self.progressView.progress = fProgress;
+//}
 
 - (IBAction)download:(id)sender {
     

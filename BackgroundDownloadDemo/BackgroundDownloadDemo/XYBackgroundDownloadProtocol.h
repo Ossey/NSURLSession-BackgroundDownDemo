@@ -8,6 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+/// 定义下载状态
+typedef NS_ENUM(NSInteger, DownloadState) {
+    DownloadStateDownloading = 1,  // 正在下载中
+    DownloadStatePause,            // 已暂停
+    DownloadStateFinish,           // 下载完成
+    DownloadStateFailure,          // 下载失败
+    DownloadStateUnknown           // 未知
+};
+
 @protocol XYBackgroundDownloadProtocol <NSObject>
 
 @optional
@@ -28,5 +37,13 @@
 
 /// 判断是否是有效的resumeData
 - (BOOL)xy_isValideResumeData:(NSData *)resumeData;
+
+/// 当正在下载时调用此方法，可让代理对象实现
+- (void)xy_backgroundDownload:(id)objc progress:(NSString *)progress;
+
+/// 下载状态属性, 默认为未知状态
+@property (nonatomic, assign) DownloadState downloadState;
+/// 下载进度属性
+@property (nonatomic, copy) NSString *progress;
 
 @end

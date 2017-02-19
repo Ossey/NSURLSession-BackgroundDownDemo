@@ -27,6 +27,8 @@
     [self xy_registerLocalNotificationWithBlock:^(UILocalNotification *localNotification) {
         /// 注册完成后回调
         
+        NSLog(@"%@", localNotification);
+        
         // ios8后，需要添加这个注册，才能得到授权
         if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
             UIUserNotificationType type =  UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;

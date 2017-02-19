@@ -9,6 +9,8 @@
 #import "AppDelegate+XYWindow.h"
 #import <objc/runtime.h>
 #import "DownloadViewController.h"
+#import "AppDelegate+XYBackgroundTask.h"
+
 
 @implementation AppDelegate (XYWindow)
 
@@ -16,14 +18,15 @@
     objc_setAssociatedObject(self, @selector(window), window, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-#pragma mark - lazy
 
 - (UIWindow *)window {
     
     UIWindow *w = objc_getAssociatedObject(self, @selector(window));
     if (w == nil) {
         self.window = (w = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds]);
-        w.rootViewController = [[UINavigationController alloc] initWithRootViewController:[DownloadViewController new]];
+        DownloadViewController *vc = [DownloadViewController new];
+        self.backgroundDownloadDelegate = vc;
+        w.rootViewController = [[UINavigationController alloc] initWithRootViewController:vc];
         
     }
 

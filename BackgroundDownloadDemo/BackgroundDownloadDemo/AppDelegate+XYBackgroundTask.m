@@ -16,10 +16,12 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
 
 typedef void(^CompletionHandler)();
 
+
+
 @interface AppDelegate () <NSURLSessionDownloadDelegate>
 
 /// 后台会话对象
-@property (nonatomic, strong) NSURLSession *backgrounSession;
+@property (nonatomic, strong) NSURLSession *backgroundSession;
 /// 下载任务
 @property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;
 /// 包含了下载任务的一些状态，之后使用此属性可以恢复下载
@@ -28,8 +30,9 @@ typedef void(^CompletionHandler)();
 @property (nonatomic, strong) UILocalNotification *localNotification;
 /// 通知的内容
 @property (nonatomic, strong) NSString *notifyMessage;
-
+/// 保存block的字典
 @property (nonatomic, strong) NSMutableDictionary *completionHandlerDict;
+
 
 @end
 
@@ -42,19 +45,34 @@ typedef void(^CompletionHandler)();
     NSURL *url = [NSURL URLWithString:urlStr];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
+   
+//    NSLog(@"%@--%lu", self.resumeData, self.resumeData.length);
+    
+    // 解决重复点击下载的问题
+    
+    
+    // 判断resumeData属性是否有值，若有值就直接接着以前的下载，不再重复下载
+    if ([self xy_isValideResumeData:self.resumeData]) {
+        
+        [self xy_backgroundDownloadContinue];
+        return;
+    }
+    __weak typeof(self) weakSelf = self;
+    
     // 如果当前有下载任务，取消最后的下载任务,取消后会回调给我们 resumeData
     if (self.downloadTask) {
         [self.downloadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
-            
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strongSelf.resumeData = resumeData;
         }];
     }
     
     
     // 下载任务
-    self.downloadTask  = [self.backgrounSession downloadTaskWithRequest:request];
+    self.downloadTask  = [self.backgroundSession downloadTaskWithRequest:request];
     [self.downloadTask resume];
     
-//    NSLog(@"%@--%@", self.backgrounSession, self.backgrounSession.delegate);
+//    NSLog(@"%@--%@", self.backgroundSession, self.backgroundSession.delegate);
     
 }
 
@@ -74,10 +92,10 @@ typedef void(^CompletionHandler)();
     if (self.resumeData) {
         if IS_IOS10_AFTER {
             // iOS10及其以后
-            self.downloadTask = [self.backgrounSession xy_downloadTaskWithResumeData:self.resumeData];
+            self.downloadTask = [self.backgroundSession xy_downloadTaskWithResumeData:self.resumeData];
         } else {
             // iOS10之前
-            self.downloadTask = [self.backgrounSession downloadTaskWithResumeData:self.resumeData];
+            self.downloadTask = [self.backgroundSession downloadTaskWithResumeData:self.resumeData];
         }
         [self.downloadTask resume];
         self.resumeData = nil;
@@ -87,7 +105,7 @@ typedef void(^CompletionHandler)();
 
 - (NSURLSession *)xy_backgroundDownloadConfigSession {
     
-    return self.backgrounSession;
+    return self.backgroundSession;
 }
 
 - (void)xy_registerLocalNotificationWithBlock:(void (^)(UILocalNotification *))block {
@@ -146,10 +164,11 @@ typedef void(^CompletionHandler)();
  * @TODO: 在使用downloadTaskWithResumeData:方法获取到对应NSURLSessionDownloadTask，并该task调用resume的时候调用
  *
  * @param   fileOffset  从fileOffset位移处恢复下载任务
+ * @param   expectedTotalBytes  预期的总字节数
  */
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes {
     
-    NSLog(@"fileOffset:%lld expectedTotalBytes:%lld",fileOffset,expectedTotalBytes);
+    NSLog(@"恢复下载的位置:%lld 预期的总字节数:%lld",fileOffset,expectedTotalBytes);
 }
 
 
@@ -212,6 +231,7 @@ typedef void(^CompletionHandler)();
     } else {
         
         [self sendLocalNotification];
+        // 下载完成后发布通知为1，即百分之百
         [self postDownloadProgressNotification:@"1"];
     }
 
@@ -223,7 +243,7 @@ typedef void(^CompletionHandler)();
 
 /**
  * 这个主要就是用来处理大数据量的下载的，其保证应用即使在后台也不影响数据的上传和下载。用法：
- * 1.创建NSURLSession的backgrounSession，并对其进行配置
+ * 1.创建NSURLSession的backgroundSession，并对其进行配置
  * 2.使用该Session启动一个数据传输任务。
  * 3.在AppDelegate中实现方法告诉应用
  */
@@ -232,7 +252,7 @@ typedef void(^CompletionHandler)();
     // 你必须重新建立一个后台 seesion 的参照
     // 否则 NSURLSessionDownloadDelegate 和 NSURLSessionDelegate 方法会因为
     // 没有 对 session 的 delegate 设定而不会被调用。参见上面的 backgroundURLSession
-    NSURLSession *backgroundSession = self.backgrounSession;
+    NSURLSession *backgroundSession = self.backgroundSession;
     
     NSLog(@"下载任务标识符:%@, 后台会话对象:%@", identifier, backgroundSession);
     
@@ -247,7 +267,7 @@ typedef void(^CompletionHandler)();
     
     // 取消所有通知
     [application cancelAllLocalNotifications];
-    [[[UIAlertView alloc] initWithTitle:@"下载通知" message:self.notifyMessage delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil] show];
+    [[[UIAlertView alloc] initWithTitle:@"下载通知" message:self.notifyMessage delegate:nil cancelButtonTitle:@"好" otherButtonTitles:nil, nil] show];
     
     // 点击通知后，就让图标上的数字减1
     application.applicationIconBadgeNumber -= 1;
@@ -265,7 +285,7 @@ typedef void(^CompletionHandler)();
 - (void)addCompletionHandler:(CompletionHandler)handler identifier:(NSString *)identifier {
     
     if ([self.completionHandlerDict objectForKey:identifier]) {
-        NSLog(@"Error: Got multiple handlers for a single session identifier.  This should not happen.\n");
+        NSLog(@"Error: identifier已存在\n");
     }
     // 将block 保存起来在completionHandlerDict字典中，key使用下载任务标识符(唯一)
     [self.completionHandlerDict setObject:handler forKey:identifier];
@@ -287,10 +307,16 @@ typedef void(^CompletionHandler)();
 
 #pragma mark - notify
 - (void)postDownloadProgressNotification:(NSString *)message {
-    NSLog(@"%@", [NSThread currentThread]);
-    // 发布通知
+//    NSLog(@"%@", [NSThread currentThread]);
+    // 发布通知 回到主线程
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        
+        if (self.backgroundDownloadDelegate && [self.backgroundDownloadDelegate respondsToSelector:@selector(xy_backgroundDownload:progress:)]) {
+            [self.backgroundDownloadDelegate xy_backgroundDownload:self progress:message];
+        }
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:XYDownloadProgressNotification object:message];
+        
     }];
 }
 
@@ -302,12 +328,12 @@ typedef void(^CompletionHandler)();
 
 #pragma mark - set\get
 
-- (void)setBackgrounSession:(NSURLSession *)backgrounSession {
-    objc_setAssociatedObject(self, @selector(backgrounSession), backgrounSession, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setBackgroundSession:(NSURLSession *)backgroundSession {
+    objc_setAssociatedObject(self, @selector(backgroundSession), backgroundSession, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 
-- (NSURLSession *)backgrounSession {
+- (NSURLSession *)backgroundSession {
     
     /// 创建一个后台下载对象 用dispatch_once创建一个用于后台下载对象，目的是为了保证identifier的唯一
     /// 文档不建议对于相同的标识符 (identifier) 创建多个会话对象。
@@ -317,7 +343,7 @@ typedef void(^CompletionHandler)();
     dispatch_once(&onceToken, ^{
         NSString *identifier = @"com.sey.backgroundSession";
         NSURLSessionConfiguration* sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
-       self.backgrounSession = (session = [NSURLSession sessionWithConfiguration:sessionConfig
+       self.backgroundSession = (session = [NSURLSession sessionWithConfiguration:sessionConfig
                                                 delegate:self
                                            delegateQueue:[NSOperationQueue new]]);
     });
@@ -349,7 +375,7 @@ typedef void(^CompletionHandler)();
     
     UILocalNotification *localNot = objc_getAssociatedObject(self, @selector(localNotification));
     
-    if (localNot) {
+    if (localNot == nil) {
         self.localNotification = (localNot = [UILocalNotification new]);
         localNot.fireDate = [[NSDate date] dateByAddingTimeInterval:5];
         localNot.alertAction = nil;
@@ -381,5 +407,26 @@ typedef void(^CompletionHandler)();
     return dict;
 }
 
+- (void)setBackgroundDownloadDelegate:(id<XYBackgroundDownloadProtocol>)backgroundDownloadDelegate {
+    objc_setAssociatedObject(self, @selector(backgroundDownloadDelegate), backgroundDownloadDelegate, OBJC_ASSOCIATION_ASSIGN);
+}
+
+- (id<XYBackgroundDownloadProtocol>)backgroundDownloadDelegate {
+    return objc_getAssociatedObject(self, @selector(backgroundDownloadDelegate));
+}
+
+- (void)setDownloadState:(DownloadState)downloadState {
+    objc_setAssociatedObject(self, @selector(downloadState), @(downloadState), OBJC_ASSOCIATION_ASSIGN);
+}
+- (DownloadState)downloadState {
+    return [objc_getAssociatedObject(self, @selector(downloadState)) integerValue] ?: DownloadStateUnknown;
+}
+
+- (void)setProgress:(NSString *)progress {
+    objc_setAssociatedObject(self, @selector(progress), progress, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+- (NSString *)progress {
+    return objc_getAssociatedObject(self, @selector(progress));
+}
 
 @end
