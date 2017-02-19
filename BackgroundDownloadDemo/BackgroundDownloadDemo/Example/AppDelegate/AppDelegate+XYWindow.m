@@ -25,7 +25,8 @@
     if (w == nil) {
         self.window = (w = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds]);
         DownloadViewController *vc = [DownloadViewController new];
-        self.backgroundDownloadDelegate = vc;
+        __weak typeof(self) weakSelf = self;
+       weakSelf.backgroundDownloadDelegate = vc;
         w.rootViewController = [[UINavigationController alloc] initWithRootViewController:vc];
         
     }

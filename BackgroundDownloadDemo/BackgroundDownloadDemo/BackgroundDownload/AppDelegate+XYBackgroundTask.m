@@ -33,6 +33,8 @@ typedef void(^CompletionHandler)();
 /// 保存block的字典
 @property (nonatomic, strong) NSMutableDictionary *completionHandlerDict;
 
+@property (nonatomic, strong) NSMutableDictionary *downloadTaskDict;
+@property (nonatomic, strong) NSMutableDictionary *downloadResumeDataDict;
 
 @end
 
@@ -74,6 +76,12 @@ typedef void(^CompletionHandler)();
     // 正在下载中
     self.downloadState = DownloadStateDownloading;
     
+    // 将任务根据 urlStr 缓存起来
+//    [self.downloadTaskDict setObject:self.downloadTask forKey:urlStr];
+    
+    NSLog(@"%@", self.downloadTask);
+    
+    
 }
 
 - (void)xy_backgroundDownloadPause {
@@ -84,7 +92,11 @@ typedef void(^CompletionHandler)();
         __strong typeof(weakSelf) strongSelf = weakSelf;
         strongSelf.resumeData = resumeData;
         strongSelf.downloadState = DownloadStatePause;
+        /// 将resumeData与urlStr缓存起来，下次通过urlStr去取resumeData
     }];
+    
+    
+    NSLog(@"%@", self.downloadTask);
 }
 
 - (void)xy_backgroundDownloadContinue {
@@ -130,7 +142,9 @@ typedef void(^CompletionHandler)();
 
 - (void)xy_clear {
     // 主要目的是清除代理，防止奔溃
-    self.backgroundDownloadDelegate = nil;
+    if (self.backgroundDownloadDelegate) {
+        self.backgroundDownloadDelegate = nil;
+    }
 }
 
 #pragma mark - NSURLSessionDownloadDelegate 
@@ -163,7 +177,6 @@ typedef void(^CompletionHandler)();
     }
     
     // 用 NSFileManager 将文件复制到应用的存储中
-    // ...
     
     // 通知 UI 刷新
 }
@@ -192,7 +205,7 @@ typedef void(^CompletionHandler)();
  */
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
     
-    NSLog(@"下载任务的标识符:%lu 下载进度百分比percent:%.2f%%",(unsigned long)downloadTask.taskIdentifier,(CGFloat)totalBytesWritten / totalBytesExpectedToWrite * 100);
+//    NSLog(@"下载任务的标识符:%lu 下载进度百分比percent:%.2f%%",(unsigned long)downloadTask.taskIdentifier,(CGFloat)totalBytesWritten / totalBytesExpectedToWrite * 100);
     // 获取下载进度
     NSString *downProgress = [NSString stringWithFormat:@"%.2f",(CGFloat)totalBytesWritten / totalBytesExpectedToWrite];
     
@@ -201,6 +214,8 @@ typedef void(^CompletionHandler)();
     
     // 通知view更新下载进度
     [self postDownloadProgressNotification:downProgress];
+    
+//     NSLog(@"标识符:%lu task:%@",(unsigned long)downloadTask.taskIdentifier,downloadTask);
 }
 
 
@@ -451,6 +466,9 @@ typedef void(^CompletionHandler)();
         [self.backgroundDownloadDelegate xy_backgroundDownload:self downloadStateDidChange:downloadState];
     }
     
+    // 发布状态发生改变的通知
+    
+    
 }
 - (DownloadState)downloadState {
     return [objc_getAssociatedObject(self, @selector(downloadState)) integerValue] ?: DownloadStateUnknown;
@@ -462,6 +480,28 @@ typedef void(^CompletionHandler)();
 
 - (NSString *)downProgress {
     return objc_getAssociatedObject(self, @selector(downProgress));
+}
+
+- (void)setDownloadTaskDict:(NSMutableDictionary *)downloadTaskDict {
+    objc_setAssociatedObject(self, @selector(downloadTaskDict), downloadTaskDict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+- (NSMutableDictionary *)downloadTaskDict {
+    id obj = objc_getAssociatedObject(self, @selector(downloadTaskDict));
+    if (obj == nil) {
+        self.downloadTaskDict = (obj = [NSMutableDictionary dictionaryWithCapacity:0]);
+    }
+    return obj;
+}
+
+- (void)setDownloadResumeDataDict:(NSMutableDictionary *)downloadResumeDataDict {
+    objc_setAssociatedObject(self, @selector(downloadResumeDataDict), downloadResumeDataDict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+- (NSMutableDictionary *)downloadResumeDataDict {
+    id obj = objc_getAssociatedObject(self, @selector(downloadResumeDataDict));
+    if (obj == nil) {
+        self.downloadResumeDataDict = (obj = [NSMutableDictionary dictionaryWithCapacity:0]);
+    }
+    return obj;
 }
 
 @end

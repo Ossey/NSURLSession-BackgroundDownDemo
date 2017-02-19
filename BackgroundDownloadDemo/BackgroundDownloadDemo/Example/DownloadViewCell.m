@@ -32,6 +32,7 @@
     self.app.backgroundDownloadDelegate = self;
     self.isFirst = YES;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.downBtn.tintColor = [UIColor clearColor];
 }
 
 - (void)download:(UIButton *)btn {
@@ -77,10 +78,12 @@
             [self.downBtn setTitle:@"继续" forState:UIControlStateNormal];
             break;
         case DownloadStateDownloading:
-            [self.downBtn setTitle:@"暂停" forState:UIControlStateNormal];
+            [self.downBtn setTitle:@"暂停" forState:UIControlStateSelected];
+            
             break;
         case DownloadStateFinish:
-            [self.downBtn setTitle:@"完成" forState:UIControlStateNormal];
+            [self.downBtn setTitle:@"下载完成" forState:UIControlStateSelected];
+            self.downBtn.selected = YES;
             break;
         case DownloadStateFailure:
             [self.downBtn setTitle:@"再试一次" forState:UIControlStateNormal];
