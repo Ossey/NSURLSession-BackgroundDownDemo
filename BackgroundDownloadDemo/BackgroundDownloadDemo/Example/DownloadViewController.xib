@@ -21,8 +21,8 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.00%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dcw-Tg-HYk">
-                    <rect key="frame" x="164" y="172" width="48" height="21"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dcw-Tg-HYk">
+                    <rect key="frame" x="169.5" y="172" width="37" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -66,6 +66,19 @@
                         <constraint firstAttribute="width" constant="180" id="EIX-kt-MaQ"/>
                     </constraints>
                 </progressView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rch-zO-I66" customClass="DownButton">
+                    <rect key="frame" x="144" y="100" width="88" height="30"/>
+                    <color key="backgroundColor" red="0.19215686269999999" green="0.80000000000000004" blue="0.66666666669999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="88" id="zOT-w9-T4V"/>
+                    </constraints>
+                    <state key="normal" title="跳转">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="jumpTo2Vc:" destination="-1" eventType="touchUpInside" id="Ndi-ke-9Hz"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -73,8 +86,10 @@
                 <constraint firstItem="jrH-I9-FaI" firstAttribute="top" secondItem="Dcw-Tg-HYk" secondAttribute="bottom" constant="85" id="9xH-Cb-FuR"/>
                 <constraint firstItem="JyM-6t-IZF" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="BK0-fC-ibr"/>
                 <constraint firstItem="JyM-6t-IZF" firstAttribute="width" secondItem="mqK-tq-gg3" secondAttribute="width" id="TGd-4H-9vd"/>
+                <constraint firstItem="rch-zO-I66" firstAttribute="centerX" secondItem="kIm-s6-ThV" secondAttribute="centerX" id="b8a-bo-ajn"/>
                 <constraint firstItem="kIm-s6-ThV" firstAttribute="centerX" secondItem="JyM-6t-IZF" secondAttribute="centerX" id="ftV-Or-1Pj"/>
                 <constraint firstItem="mqK-tq-gg3" firstAttribute="top" secondItem="JyM-6t-IZF" secondAttribute="bottom" constant="56" id="gJP-V0-vmz"/>
+                <constraint firstItem="rch-zO-I66" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="100" id="iDb-cj-sts"/>
                 <constraint firstItem="mqK-tq-gg3" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="pAL-3b-iR0"/>
                 <constraint firstItem="JyM-6t-IZF" firstAttribute="top" secondItem="kIm-s6-ThV" secondAttribute="bottom" constant="61" id="rvb-9d-BK8"/>
                 <constraint firstItem="kIm-s6-ThV" firstAttribute="top" secondItem="jrH-I9-FaI" secondAttribute="bottom" constant="80" id="u4d-C9-d1A"/>

@@ -61,6 +61,9 @@ typedef NS_ENUM(NSInteger, DownloadState) {
  */
 - (void)xy_backgroundDownload:(id)objc downloadStateDidChange:(DownloadState)state;
 
+/// 调用此方法，主要目的是清除代理，防止奔溃，但是后台还是会继续下载
+- (void)xy_clear;
+
 /// 下载状态属性, 默认为未知状态
 @property (nonatomic, assign) DownloadState downloadState;
 /// 下载进度属性

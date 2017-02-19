@@ -17,6 +17,9 @@
 		18686BAB1E59B65B00671D89 /* DownButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686BA51E59B65B00671D89 /* DownButton.m */; };
 		18686BAC1E59B65B00671D89 /* DownloadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686BA71E59B65B00671D89 /* DownloadViewController.m */; };
 		18686BAD1E59B65B00671D89 /* DownloadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18686BA81E59B65B00671D89 /* DownloadViewController.xib */; };
+		18686BB91E59C5BB00671D89 /* DownloadViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686BB71E59C5BB00671D89 /* DownloadViewCell.m */; };
+		18686BBA1E59C5BB00671D89 /* DownloadViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18686BB81E59C5BB00671D89 /* DownloadViewCell.xib */; };
+		18686BBD1E59CB0F00671D89 /* Download2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686BBC1E59CB0F00671D89 /* Download2ViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +42,11 @@
 		18686BA61E59B65B00671D89 /* DownloadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadViewController.h; sourceTree = "<group>"; };
 		18686BA71E59B65B00671D89 /* DownloadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadViewController.m; sourceTree = "<group>"; };
 		18686BA81E59B65B00671D89 /* DownloadViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DownloadViewController.xib; sourceTree = "<group>"; };
+		18686BB61E59C5BB00671D89 /* DownloadViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadViewCell.h; sourceTree = "<group>"; };
+		18686BB71E59C5BB00671D89 /* DownloadViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadViewCell.m; sourceTree = "<group>"; };
+		18686BB81E59C5BB00671D89 /* DownloadViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DownloadViewCell.xib; sourceTree = "<group>"; };
+		18686BBB1E59CB0F00671D89 /* Download2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Download2ViewController.h; sourceTree = "<group>"; };
+		18686BBC1E59CB0F00671D89 /* Download2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Download2ViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,7 +117,12 @@
 				18686BA51E59B65B00671D89 /* DownButton.m */,
 				18686BA61E59B65B00671D89 /* DownloadViewController.h */,
 				18686BA71E59B65B00671D89 /* DownloadViewController.m */,
+				18686BBB1E59CB0F00671D89 /* Download2ViewController.h */,
+				18686BBC1E59CB0F00671D89 /* Download2ViewController.m */,
 				18686BA81E59B65B00671D89 /* DownloadViewController.xib */,
+				18686BB61E59C5BB00671D89 /* DownloadViewCell.h */,
+				18686BB71E59C5BB00671D89 /* DownloadViewCell.m */,
+				18686BB81E59C5BB00671D89 /* DownloadViewCell.xib */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -184,6 +197,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18686BBA1E59C5BB00671D89 /* DownloadViewCell.xib in Resources */,
 				18686B751E595DD600671D89 /* LaunchScreen.storyboard in Resources */,
 				18686BAD1E59B65B00671D89 /* DownloadViewController.xib in Resources */,
 				18686B721E595DD600671D89 /* Assets.xcassets in Resources */,
@@ -197,6 +211,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18686BB91E59C5BB00671D89 /* DownloadViewCell.m in Sources */,
+				18686BBD1E59CB0F00671D89 /* Download2ViewController.m in Sources */,
 				18686B9C1E59B5D100671D89 /* NSURLSession+XYResumeData.m in Sources */,
 				18686BAC1E59B65B00671D89 /* DownloadViewController.m in Sources */,
 				18686BA91E59B65B00671D89 /* AppDelegate+XYWindow.m in Sources */,
@@ -354,6 +370,7 @@
 				18686B7B1E595DD600671D89 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

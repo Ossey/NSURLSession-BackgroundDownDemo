@@ -89,6 +89,7 @@ typedef void(^CompletionHandler)();
 
 - (void)xy_backgroundDownloadContinue {
     
+    
     // 继续下载时，判断resumeData是否存在，若存在，说明当前有任务在暂停，可继续此任务继续下载
     if (self.resumeData) {
         if IS_IOS10_AFTER {
@@ -125,6 +126,11 @@ typedef void(^CompletionHandler)();
         return NO;
     }
     return YES;
+}
+
+- (void)xy_clear {
+    // 主要目的是清除代理，防止奔溃
+    self.backgroundDownloadDelegate = nil;
 }
 
 #pragma mark - NSURLSessionDownloadDelegate 
