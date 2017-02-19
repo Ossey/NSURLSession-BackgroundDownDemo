@@ -23,6 +23,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.title = @"下载";
+    
     // 监听通知的方式 获取下载进度
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateDownloadProgress:) name:XYDownloadProgressNotification object:nil];
     
@@ -30,7 +32,8 @@
 }
 
 #pragma mark - XYBackgroundDownloadProtocol
-- (void)xy_backgroundDownload:(id)objc progress:(NSString *)progress {
+// 代理方式 获取下载进度
+- (void)xy_backgroundDownload:(id)objc downloadprogressDidChange:(NSString *)progress {
     CGFloat fProgress = [progress floatValue];
     
     self.progressLabel.text = [NSString stringWithFormat:@"%.2f%%",fProgress * 100];

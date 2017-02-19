@@ -324,8 +324,8 @@ typedef void(^CompletionHandler)();
     // 发布通知 回到主线程
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         
-        if (self.backgroundDownloadDelegate && [self.backgroundDownloadDelegate respondsToSelector:@selector(xy_backgroundDownload:progress:)]) {
-            [self.backgroundDownloadDelegate xy_backgroundDownload:self progress:message];
+        if (self.backgroundDownloadDelegate && [self.backgroundDownloadDelegate respondsToSelector:@selector(xy_backgroundDownload:downloadprogressDidChange:)]) {
+            [self.backgroundDownloadDelegate xy_backgroundDownload:self downloadprogressDidChange:message];
         }
         
         [[NSNotificationCenter defaultCenter] postNotificationName:XYDownloadProgressNotification object:message];
@@ -430,6 +430,11 @@ typedef void(^CompletionHandler)();
 
 - (void)setDownloadState:(DownloadState)downloadState {
     objc_setAssociatedObject(self, @selector(downloadState), @(downloadState), OBJC_ASSOCIATION_ASSIGN);
+    
+    if (self.backgroundDownloadDelegate && [self.backgroundDownloadDelegate respondsToSelector:@selector(xy_backgroundDownload:downloadStateDidChange:)]) {
+        [self.backgroundDownloadDelegate xy_backgroundDownload:self downloadStateDidChange:downloadState];
+    }
+    
 }
 - (DownloadState)downloadState {
     return [objc_getAssociatedObject(self, @selector(downloadState)) integerValue] ?: DownloadStateUnknown;
