@@ -20,7 +20,11 @@ typedef NS_ENUM(NSInteger, DownloadState) {
 @protocol XYBackgroundDownloadProtocol <NSObject>
 
 @optional
-/// 开始下载
+/**
+ * 开始下载
+ *
+ * @param   urlStr  下载文件的url路径
+ */
 - (void)xy_backgroundDownloadBeginWithURL:(NSString *)urlStr;
 
 /// 暂停下载
@@ -44,6 +48,6 @@ typedef NS_ENUM(NSInteger, DownloadState) {
 /// 下载状态属性, 默认为未知状态
 @property (nonatomic, assign) DownloadState downloadState;
 /// 下载进度属性
-@property (nonatomic, copy) NSString *progress;
+@property (nonatomic, copy) NSString *downProgress;
 
 @end

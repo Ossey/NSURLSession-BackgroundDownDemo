@@ -45,11 +45,11 @@ typedef void(^CompletionHandler)();
     NSURL *url = [NSURL URLWithString:urlStr];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
-   
-//    NSLog(@"%@--%lu", self.resumeData, self.resumeData.length);
-    
     // 解决重复点击下载的问题
-    
+    if (self.downloadState == DownloadStateDownloading) {
+        // 正在下载中就不再重复下载了
+        return;
+    }
     
     // 判断resumeData属性是否有值，若有值就直接接着以前的下载，不再重复下载
     if ([self xy_isValideResumeData:self.resumeData]) {
@@ -71,8 +71,8 @@ typedef void(^CompletionHandler)();
     // 下载任务
     self.downloadTask  = [self.backgroundSession downloadTaskWithRequest:request];
     [self.downloadTask resume];
-    
-//    NSLog(@"%@--%@", self.backgroundSession, self.backgroundSession.delegate);
+    // 正在下载中
+    self.downloadState = DownloadStateDownloading;
     
 }
 
@@ -83,6 +83,7 @@ typedef void(^CompletionHandler)();
     [self.downloadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         strongSelf.resumeData = resumeData;
+        strongSelf.downloadState = DownloadStatePause;
     }];
 }
 
@@ -99,6 +100,8 @@ typedef void(^CompletionHandler)();
         }
         [self.downloadTask resume];
         self.resumeData = nil;
+        // 正在下载中
+        self.downloadState = DownloadStateDownloading;
     }
 }
 
@@ -185,9 +188,13 @@ typedef void(^CompletionHandler)();
     
     NSLog(@"下载任务的标识符:%lu 下载进度百分比percent:%.2f%%",(unsigned long)downloadTask.taskIdentifier,(CGFloat)totalBytesWritten / totalBytesExpectedToWrite * 100);
     // 获取下载进度
-    NSString *strProgress = [NSString stringWithFormat:@"%.2f",(CGFloat)totalBytesWritten / totalBytesExpectedToWrite];
+    NSString *downProgress = [NSString stringWithFormat:@"%.2f",(CGFloat)totalBytesWritten / totalBytesExpectedToWrite];
+    
+    // 赋值下载进度
+    self.downProgress = downProgress;
+    
     // 通知view更新下载进度
-    [self postDownloadProgressNotification:strProgress];
+    [self postDownloadProgressNotification:downProgress];
 }
 
 
@@ -228,7 +235,13 @@ typedef void(^CompletionHandler)();
             //通过之前保存的resumeData，获取断点的NSURLSessionTask，调用resume恢复下载
             self.resumeData = resumeData;
         }
+        // 下载失败
+        self.downloadState = DownloadStateFailure;
+        
     } else {
+        
+        // 下载完成
+        self.downloadState = DownloadStateFinish;
         
         [self sendLocalNotification];
         // 下载完成后发布通知为1，即百分之百
@@ -422,11 +435,12 @@ typedef void(^CompletionHandler)();
     return [objc_getAssociatedObject(self, @selector(downloadState)) integerValue] ?: DownloadStateUnknown;
 }
 
-- (void)setProgress:(NSString *)progress {
-    objc_setAssociatedObject(self, @selector(progress), progress, OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setDownProgress:(NSString *)downProgress {
+    objc_setAssociatedObject(self, @selector(downProgress), downProgress, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
-- (NSString *)progress {
-    return objc_getAssociatedObject(self, @selector(progress));
+
+- (NSString *)downProgress {
+    return objc_getAssociatedObject(self, @selector(downProgress));
 }
 
 @end

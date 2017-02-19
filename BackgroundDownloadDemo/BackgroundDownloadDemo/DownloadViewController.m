@@ -48,7 +48,7 @@
 - (IBAction)download:(id)sender {
     
     
-    [self.app xy_backgroundDownloadBeginWithURL:@"http://sw.bos.baidu.com/sw-search-sp/software/797b4439e2551/QQ_mac_5.0.2.dmg"];
+    [self.app xy_backgroundDownloadBeginWithURL:@"https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg"];
 }
 
 - (IBAction)pause:(id)sender {
