@@ -1,0 +1,323 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		18686B671E595DD600671D89 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686B661E595DD600671D89 /* main.m */; };
+		18686B6A1E595DD600671D89 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686B691E595DD600671D89 /* AppDelegate.m */; };
+		18686B721E595DD600671D89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18686B711E595DD600671D89 /* Assets.xcassets */; };
+		18686B751E595DD600671D89 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18686B731E595DD600671D89 /* LaunchScreen.storyboard */; };
+		18686B811E595EC100671D89 /* DownloadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686B7F1E595EC100671D89 /* DownloadViewController.m */; };
+		18686B821E595EC100671D89 /* DownloadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18686B801E595EC100671D89 /* DownloadViewController.xib */; };
+		18686B881E595FD200671D89 /* AppDelegate+XYWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686B871E595FD200671D89 /* AppDelegate+XYWindow.m */; };
+		18686B8B1E5963BE00671D89 /* DownButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686B8A1E5963BE00671D89 /* DownButton.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		18686B621E595DD600671D89 /* BackgroundDownloadDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BackgroundDownloadDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		18686B661E595DD600671D89 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		18686B681E595DD600671D89 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		18686B691E595DD600671D89 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		18686B711E595DD600671D89 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		18686B741E595DD600671D89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		18686B761E595DD600671D89 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18686B7E1E595EC100671D89 /* DownloadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadViewController.h; sourceTree = "<group>"; };
+		18686B7F1E595EC100671D89 /* DownloadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadViewController.m; sourceTree = "<group>"; };
+		18686B801E595EC100671D89 /* DownloadViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DownloadViewController.xib; sourceTree = "<group>"; };
+		18686B861E595FD200671D89 /* AppDelegate+XYWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+XYWindow.h"; sourceTree = "<group>"; };
+		18686B871E595FD200671D89 /* AppDelegate+XYWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+XYWindow.m"; sourceTree = "<group>"; };
+		18686B891E5963BE00671D89 /* DownButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownButton.h; sourceTree = "<group>"; };
+		18686B8A1E5963BE00671D89 /* DownButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownButton.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		18686B5F1E595DD600671D89 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		18686B591E595DD600671D89 = {
+			isa = PBXGroup;
+			children = (
+				18686B641E595DD600671D89 /* BackgroundDownloadDemo */,
+				18686B631E595DD600671D89 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		18686B631E595DD600671D89 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				18686B621E595DD600671D89 /* BackgroundDownloadDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		18686B641E595DD600671D89 /* BackgroundDownloadDemo */ = {
+			isa = PBXGroup;
+			children = (
+				18686B681E595DD600671D89 /* AppDelegate.h */,
+				18686B691E595DD600671D89 /* AppDelegate.m */,
+				18686B861E595FD200671D89 /* AppDelegate+XYWindow.h */,
+				18686B871E595FD200671D89 /* AppDelegate+XYWindow.m */,
+				18686B7E1E595EC100671D89 /* DownloadViewController.h */,
+				18686B7F1E595EC100671D89 /* DownloadViewController.m */,
+				18686B801E595EC100671D89 /* DownloadViewController.xib */,
+				18686B891E5963BE00671D89 /* DownButton.h */,
+				18686B8A1E5963BE00671D89 /* DownButton.m */,
+				18686B711E595DD600671D89 /* Assets.xcassets */,
+				18686B731E595DD600671D89 /* LaunchScreen.storyboard */,
+				18686B761E595DD600671D89 /* Info.plist */,
+				18686B651E595DD600671D89 /* Supporting Files */,
+			);
+			path = BackgroundDownloadDemo;
+			sourceTree = "<group>";
+		};
+		18686B651E595DD600671D89 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				18686B661E595DD600671D89 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		18686B611E595DD600671D89 /* BackgroundDownloadDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 18686B791E595DD600671D89 /* Build configuration list for PBXNativeTarget "BackgroundDownloadDemo" */;
+			buildPhases = (
+				18686B5E1E595DD600671D89 /* Sources */,
+				18686B5F1E595DD600671D89 /* Frameworks */,
+				18686B601E595DD600671D89 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BackgroundDownloadDemo;
+			productName = BackgroundDownloadDemo;
+			productReference = 18686B621E595DD600671D89 /* BackgroundDownloadDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		18686B5A1E595DD600671D89 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = com.test.demo;
+				TargetAttributes = {
+					18686B611E595DD600671D89 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = NKW67GFDHM;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 18686B5D1E595DD600671D89 /* Build configuration list for PBXProject "BackgroundDownloadDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 18686B591E595DD600671D89;
+			productRefGroup = 18686B631E595DD600671D89 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				18686B611E595DD600671D89 /* BackgroundDownloadDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		18686B601E595DD600671D89 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18686B821E595EC100671D89 /* DownloadViewController.xib in Resources */,
+				18686B751E595DD600671D89 /* LaunchScreen.storyboard in Resources */,
+				18686B721E595DD600671D89 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		18686B5E1E595DD600671D89 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18686B8B1E5963BE00671D89 /* DownButton.m in Sources */,
+				18686B6A1E595DD600671D89 /* AppDelegate.m in Sources */,
+				18686B881E595FD200671D89 /* AppDelegate+XYWindow.m in Sources */,
+				18686B671E595DD600671D89 /* main.m in Sources */,
+				18686B811E595EC100671D89 /* DownloadViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		18686B731E595DD600671D89 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				18686B741E595DD600671D89 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		18686B771E595DD600671D89 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		18686B781E595DD600671D89 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		18686B7A1E595DD600671D89 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = NKW67GFDHM;
+				INFOPLIST_FILE = BackgroundDownloadDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sey.BackgroundDownloadDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		18686B7B1E595DD600671D89 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = NKW67GFDHM;
+				INFOPLIST_FILE = BackgroundDownloadDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sey.BackgroundDownloadDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		18686B5D1E595DD600671D89 /* Build configuration list for PBXProject "BackgroundDownloadDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18686B771E595DD600671D89 /* Debug */,
+				18686B781E595DD600671D89 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		18686B791E595DD600671D89 /* Build configuration list for PBXNativeTarget "BackgroundDownloadDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18686B7A1E595DD600671D89 /* Debug */,
+				18686B7B1E595DD600671D89 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 18686B5A1E595DD600671D89 /* Project object */;
+}
