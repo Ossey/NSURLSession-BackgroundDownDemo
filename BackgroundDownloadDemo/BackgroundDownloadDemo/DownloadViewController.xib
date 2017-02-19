@@ -11,9 +11,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DownloadViewController">
             <connections>
-                <outlet property="continueBtn" destination="mqK-tq-gg3" id="6Ct-FB-sV9"/>
-                <outlet property="downloadBtn" destination="kIm-s6-ThV" id="ZnR-zv-qqx"/>
-                <outlet property="pauseBtn" destination="JyM-6t-IZF" id="gjz-Ah-7nJ"/>
+                <outlet property="progressLabel" destination="Dcw-Tg-HYk" id="DuE-zJ-Iz8"/>
+                <outlet property="progressView" destination="jrH-I9-FaI" id="4RF-sF-icx"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -34,6 +33,9 @@
                     <state key="normal" title="下载">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="download:" destination="-1" eventType="touchUpInside" id="SSb-Fe-BQp"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JyM-6t-IZF" customClass="DownButton">
                     <rect key="frame" x="128" y="451" width="120" height="30"/>
@@ -41,6 +43,9 @@
                     <state key="normal" title="暂停">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="pause:" destination="-1" eventType="touchUpInside" id="xpI-P6-WIt"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mqK-tq-gg3" customClass="DownButton">
                     <rect key="frame" x="128" y="537" width="120" height="30"/>
@@ -51,6 +56,9 @@
                     <state key="normal" title="继续">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="continue:" destination="-1" eventType="touchUpInside" id="72G-pU-Per"/>
+                    </connections>
                 </button>
                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jrH-I9-FaI">
                     <rect key="frame" x="98" y="278" width="180" height="2"/>

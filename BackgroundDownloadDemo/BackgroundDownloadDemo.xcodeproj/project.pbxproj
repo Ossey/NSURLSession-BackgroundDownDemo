@@ -15,6 +15,8 @@
 		18686B821E595EC100671D89 /* DownloadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18686B801E595EC100671D89 /* DownloadViewController.xib */; };
 		18686B881E595FD200671D89 /* AppDelegate+XYWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686B871E595FD200671D89 /* AppDelegate+XYWindow.m */; };
 		18686B8B1E5963BE00671D89 /* DownButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686B8A1E5963BE00671D89 /* DownButton.m */; };
+		18686B8E1E59662400671D89 /* AppDelegate+XYBackgroundTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686B8D1E59662400671D89 /* AppDelegate+XYBackgroundTask.m */; };
+		18686B951E5976EE00671D89 /* NSURLSession+XYResumeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686B941E5976EE00671D89 /* NSURLSession+XYResumeData.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,11 @@
 		18686B871E595FD200671D89 /* AppDelegate+XYWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+XYWindow.m"; sourceTree = "<group>"; };
 		18686B891E5963BE00671D89 /* DownButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownButton.h; sourceTree = "<group>"; };
 		18686B8A1E5963BE00671D89 /* DownButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownButton.m; sourceTree = "<group>"; };
+		18686B8C1E59662400671D89 /* AppDelegate+XYBackgroundTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+XYBackgroundTask.h"; sourceTree = "<group>"; };
+		18686B8D1E59662400671D89 /* AppDelegate+XYBackgroundTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+XYBackgroundTask.m"; sourceTree = "<group>"; };
+		18686B8F1E59683900671D89 /* XYBackgroundDownloadProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYBackgroundDownloadProtocol.h; sourceTree = "<group>"; };
+		18686B931E5976EE00671D89 /* NSURLSession+XYResumeData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSession+XYResumeData.h"; sourceTree = "<group>"; };
+		18686B941E5976EE00671D89 /* NSURLSession+XYResumeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLSession+XYResumeData.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +75,11 @@
 				18686B691E595DD600671D89 /* AppDelegate.m */,
 				18686B861E595FD200671D89 /* AppDelegate+XYWindow.h */,
 				18686B871E595FD200671D89 /* AppDelegate+XYWindow.m */,
+				18686B8C1E59662400671D89 /* AppDelegate+XYBackgroundTask.h */,
+				18686B8D1E59662400671D89 /* AppDelegate+XYBackgroundTask.m */,
+				18686B931E5976EE00671D89 /* NSURLSession+XYResumeData.h */,
+				18686B941E5976EE00671D89 /* NSURLSession+XYResumeData.m */,
+				18686B8F1E59683900671D89 /* XYBackgroundDownloadProtocol.h */,
 				18686B7E1E595EC100671D89 /* DownloadViewController.h */,
 				18686B7F1E595EC100671D89 /* DownloadViewController.m */,
 				18686B801E595EC100671D89 /* DownloadViewController.xib */,
@@ -161,6 +173,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18686B8E1E59662400671D89 /* AppDelegate+XYBackgroundTask.m in Sources */,
+				18686B951E5976EE00671D89 /* NSURLSession+XYResumeData.m in Sources */,
 				18686B8B1E5963BE00671D89 /* DownButton.m in Sources */,
 				18686B6A1E595DD600671D89 /* AppDelegate.m in Sources */,
 				18686B881E595FD200671D89 /* AppDelegate+XYWindow.m in Sources */,
