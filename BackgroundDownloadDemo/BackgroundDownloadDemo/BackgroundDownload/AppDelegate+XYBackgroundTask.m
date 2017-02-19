@@ -252,6 +252,16 @@ typedef void(^CompletionHandler)();
 
 #pragma clang diagnostic pop
 
+/*
+ 任务下载完成时调用的方法：
+ 第一种情况:当任务在后台下载时完成时:
+ 先调用UIApplicationDelegate的 - URLSessionDidFinishEventsForBackgroundURLSession
+ 再调用UIApplicationDelegate的 - application: handleEventsForBackgroundURLSession: completionHandler:
+ 然后在调用NSURLSessionDownloadDelegate的- URLSession: task: didCompleteWithError:
+ 第二种情况:当任务在前台下载完成时：
+ 之调用UIApplicationDelegate的 - application: handleEventsForBackgroundURLSession: completionHandler:
+ */
+
 #pragma mark - UIApplicationDelegate 与后台任务相关的代理方法
 
 /**

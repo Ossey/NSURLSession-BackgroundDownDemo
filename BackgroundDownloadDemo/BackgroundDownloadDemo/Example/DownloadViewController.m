@@ -38,6 +38,8 @@
     
     self.progressLabel.text = [NSString stringWithFormat:@"%.2f%%",fProgress * 100];
     self.progressView.progress = fProgress;
+    
+//    NSLog(@"%@", [NSThread currentThread]);
 }
 
 #pragma mark - notify 
@@ -48,6 +50,8 @@
 //    self.progressView.progress = fProgress;
 //}
 
+
+#pragma mark - 下载操作
 - (IBAction)download:(id)sender {
     
     
