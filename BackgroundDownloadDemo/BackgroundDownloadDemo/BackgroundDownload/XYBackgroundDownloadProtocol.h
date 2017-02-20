@@ -29,10 +29,16 @@ typedef NS_ENUM(NSInteger, DownloadState) {
 - (void)xy_backgroundDownloadBeginWithURL:(NSString *)urlStr;
 
 /// 暂停下载
-- (void)xy_backgroundDownloadPause;
+- (void)xy_backgroundDownloadPause __attribute__((deprecated("已过期")));
 
 /// 继续下载
-- (void)xy_backgroundDownloadContinue;
+- (void)xy_backgroundDownloadContinue __attribute__((deprecated("已过期")));
+
+/// 暂停下载
+- (void)xy_backgroundDownloadPause:(NSString *)urlStr;
+
+/// 继续下载
+- (void)xy_backgroundDownloadContinue:(NSString *)urlStr;
 
 /// 会话对象：实现后，在application: didFinishLaunchingWithOptions中调用
 - (NSURLSession *)xy_backgroundDownloadConfigSession;
