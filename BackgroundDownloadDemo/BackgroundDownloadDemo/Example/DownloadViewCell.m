@@ -10,7 +10,7 @@
 #import "DownButton.h"
 #import "AppDelegate+XYBackgroundTask.h"
 
-@interface DownloadViewCell () <XYBackgroundDownloadProtocol>
+@interface DownloadViewCell ()
 
 @property (weak, nonatomic) IBOutlet DownButton *downBtn;
 @property (weak, nonatomic) IBOutlet UILabel *fileName;
@@ -29,7 +29,6 @@
     [super awakeFromNib];
     
     [self.downBtn addTarget:self action:@selector(download:) forControlEvents:UIControlEventTouchUpInside];
-//    self.app.backgroundDownloadDelegate = self;
     self.isFirst = YES;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.downBtn.tintColor = [UIColor clearColor];
@@ -120,43 +119,10 @@
     }
 }
 
-#pragma mark - XYBackgroundDownloadProtocol
-//- (void)xy_backgroundDownload:(id)objc downloadprogressDidChange:(NSString *)progress {
-//    
-//    
-//    CGFloat fProgress = [progress floatValue];
-//    self.progressLabel.text = [NSString stringWithFormat:@"%.2f%%",fProgress * 100];
-//    self.progressView.progress = fProgress;
-//}
-
-
-//- (void)xy_backgroundDownload:(id)objc downloadStateDidChange:(DownloadState)state {
-//    
-//    switch (state) {
-//        case DownloadStatePause:
-//            [self.downBtn setTitle:@"继续" forState:UIControlStateNormal];
-//            break;
-//        case DownloadStateDownloading:
-//            [self.downBtn setTitle:@"暂停" forState:UIControlStateSelected];
-//            
-//            break;
-//        case DownloadStateFinish:
-//            [self.downBtn setTitle:@"下载完成" forState:UIControlStateSelected];
-//            self.downBtn.selected = YES;
-//            self.downBtn.enabled = NO;
-//            break;
-//        case DownloadStateFailure:
-//            [self.downBtn setTitle:@"再试一次" forState:UIControlStateNormal];
-//            break;
-//            
-//        default:
-//            break;
-//    }
-//}
-
 - (void)dealloc {
     
-    [self.app xy_clear];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

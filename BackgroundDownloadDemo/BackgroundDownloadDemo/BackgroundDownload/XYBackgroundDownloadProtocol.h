@@ -29,15 +29,15 @@ typedef NS_ENUM(NSInteger, DownloadState) {
 - (void)xy_backgroundDownloadBeginWithURL:(NSString *)urlStr;
 
 /// 暂停下载
-- (void)xy_backgroundDownloadPause __attribute__((deprecated("已过期")));
+- (void)xy_backgroundDownloadPause __attribute__((deprecated("已过期, 请使用:- xy_backgroundDownloadPause:")));
 
 /// 继续下载
-- (void)xy_backgroundDownloadContinue __attribute__((deprecated("已过期")));
+- (void)xy_backgroundDownloadContinue __attribute__((deprecated("已过期,请使用:- xy_backgroundDownloadContinue:")));
 
-/// 暂停下载
+/// 暂停下载，当有多个文件同时下载时，根据urlStr暂停下载
 - (void)xy_backgroundDownloadPause:(NSString *)urlStr;
 
-/// 继续下载
+/// 继续下载，当有多个文件同时下载时，根据urlStr继续下载
 - (void)xy_backgroundDownloadContinue:(NSString *)urlStr;
 
 /// 会话对象：实现后，在application: didFinishLaunchingWithOptions中调用
@@ -53,26 +53,10 @@ typedef NS_ENUM(NSInteger, DownloadState) {
 /// 判断是否是有效的resumeData
 - (BOOL)xy_isValideResumeData:(NSData *)resumeData;
 
-/**
- * 当正在下载时调用此方法，可让代理对象实现
- *
- * @param   progress  下载进度
- */
-- (void)xy_backgroundDownload:(id)objc downloadprogressDidChange:(NSString *)progress;
+/// 清除所有下载任务及缓存的resumeData
+- (void)xy_releaseAll;
 
-/**
- * 当下载状态发生改变时调用
- *
- * @param   state  下载状态
- */
-- (void)xy_backgroundDownload:(id)objc downloadStateDidChange:(DownloadState)state;
-
-/// 调用此方法，主要目的是清除代理，防止奔溃，但是后台还是会继续下载
-- (void)xy_clear;
-
-/// 下载状态属性, 默认为未知状态
-@property (nonatomic, assign) DownloadState downloadState;
-/// 下载进度属性
-@property (nonatomic, copy) NSString *downProgress;
+/// 清除url对应的下载任务及缓存的resumeData
+- (void)xy_releaseByURL:(NSString *)url;
 
 @end

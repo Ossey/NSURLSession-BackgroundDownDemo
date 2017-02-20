@@ -29,7 +29,7 @@ typedef void(^CompletionHandler)();
 /// 下载任务
 @property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;
 /// 包含了下载任务的一些状态，之后使用此属性可以恢复下载
-@property (nonatomic, strong) NSData *resumeData;
+//@property (nonatomic, strong) NSData *resumeData;
 /// 本地通知
 @property (nonatomic, strong) UILocalNotification *localNotification;
 /// 通知的内容
@@ -50,83 +50,42 @@ typedef void(^CompletionHandler)();
 
 - (void)xy_backgroundDownloadBeginWithURL:(NSString *)urlStr {
     
-//    if (![self.currentDownloadURL isEqualToString:urlStr]) {
-//        // 如果正在 重新创建一个下载任务
-//        [self startDownload:urlStr];
-//        return;
-//    }
     
     // 取出当前下载状态
     DownloadState state = [self.downloadResumeDataDict[urlStr][XYDownloadStateKey] integerValue];
+    
+    NSLog(@"%lu", state);
     
     // 解决重复点击下载的问题
     if (state == DownloadStateDownloading) {
         return;
     }
-//    if (self.downloadState == DownloadStateDownloading) {
-//        // 正在下载中就不再重复下载了
-//        return;
-//    }
     
     
-//    // 取出resumeData
-//    id dataObj = self.downloadResumeDataDict[urlStr][XYDownloadResumeDataKey];
-//    if ([dataObj isKindOfClass:[NSData class]] && dataObj != nil) {
-//        
-//    }
+    // 取出resumeData
+    id dataObj = self.downloadResumeDataDict[urlStr][XYDownloadResumeDataKey];
+    if ([dataObj isKindOfClass:[NSData class]] && dataObj != nil) {
+        
+    }
     
-    // 判断resumeData属性是否有值，若有值就直接接着以前的下载，不再重复下载
-//    if ([self xy_isValideResumeData:dataObj]) {
-//        
-//        [self xy_backgroundDownloadContinue:urlStr];
-//        return;
-//    }
-//    __weak typeof(self) weakSelf = self;
-//    
-//    // 如果当前有下载任务，取消最后的下载任务,取消后会回调给我们 resumeData
-//    if (self.downloadTask) {
-//        [self.downloadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
-//            __strong typeof(weakSelf) strongSelf = weakSelf;
-//            strongSelf.resumeData = resumeData;
-//        }];
-//    }
+    // 判断将要下载的是不是正在下载的，如果是，就继续下载，如果不是就重新下载
+    if ([self.currentDownloadURL isEqualToString:urlStr]) {
+        // 判断resumeData属性是否有值，若有值就直接接着以前的下载，不再重复下载
+        if ([self xy_isValideResumeData:dataObj]) {
+            
+            [self xy_backgroundDownloadContinue:urlStr];
+            return;
+        }
+
+        return;
+    }
+    
+   
     
     [self startDownload:urlStr];
 }
 
-- (void)startDownload:(NSString *)urlStr {
-    NSURL *url = [NSURL URLWithString:urlStr];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    // 下载任务
-    self.downloadTask  = [self.backgroundSession downloadTaskWithRequest:request];
-    [self.downloadTask resume];
-//     正在下载中
-//    self.downloadState = DownloadStateDownloading;
-    // 保存当前的下载路径
-    self.currentDownloadURL = urlStr;
-    
-    // 将任务resumeData urlStr 关联起来, 若没有resumeData 则用-1关联
-    [self addMapWithURL:urlStr downloadState:DownloadStateDownloading resumeData:nil];
-}
 
-- (void)addMapWithURL:(NSString *)urlStr downloadState:(DownloadState)state resumeData:(NSData *)resumeData {
-    
-    id data = nil;
-    if (resumeData == nil) {
-        data = @(-1);
-    } else {
-        data = resumeData;
-    }
-    
-    // 将任务resumeData urlStr 关联起来, 若没有resumeData 则用-1关联
-    [self.downloadResumeDataDict setObject:@{XYDownloadResumeDataKey: data, XYDownloadStateKey: @(DownloadStateDownloading)} forKey:urlStr];
-}
-
-- (void)removeMapFromURL:(NSString *)urlStr {
-    if (urlStr && urlStr.length) {
-        [self.downloadResumeDataDict removeObjectForKey:urlStr];
-    }
-}
 
 - (void)xy_backgroundDownloadPause:(NSString *)urlStr {
     
@@ -136,8 +95,6 @@ typedef void(^CompletionHandler)();
     // 暂停下载，并将resumeData保存起来，之后使用此属性恢复下载的
     [self.downloadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-//        strongSelf.resumeData = resumeData;
-//        strongSelf.downloadState = DownloadStatePause;
         
         [strongSelf addMapWithURL:urlStr downloadState:DownloadStatePause resumeData:resumeData];
         
@@ -145,11 +102,7 @@ typedef void(^CompletionHandler)();
     
 }
 
-- (void)xy_backgroundDownloadPause {
 
-    [self xy_backgroundDownloadPause:nil];
-    
-}
 
 - (void)xy_backgroundDownloadContinue:(NSString *)urlStr {
     
@@ -157,6 +110,8 @@ typedef void(^CompletionHandler)();
     
     // 取出resumeData
     id dataObj = self.downloadResumeDataDict[urlStr][XYDownloadResumeDataKey];
+//    NSLog(@"%@", dataObj);
+    
     if ([dataObj isKindOfClass:[NSData class]] && dataObj != nil) {
         // 继续下载时，判断resumeData是否存在，若存在，说明当前有任务在暂停，可继续此任务继续下载
         if IS_IOS10_AFTER {
@@ -166,40 +121,15 @@ typedef void(^CompletionHandler)();
             // iOS10之前
             self.downloadTask = [self.backgroundSession downloadTaskWithResumeData:dataObj];
         }
-        [self.downloadTask resume];
         
+        [self.downloadTask resume];
+        // 恢复下载时，将resumeData移除
         [self addMapWithURL:urlStr downloadState:DownloadStateDownloading resumeData:nil];
 
     }
-    
-    // 继续下载时，判断resumeData是否存在，若存在，说明当前有任务在暂停，可继续此任务继续下载
-//    if (self.resumeData) {
-//        if IS_IOS10_AFTER {
-//            // iOS10及其以后
-//            self.downloadTask = [self.backgroundSession xy_downloadTaskWithResumeData:self.resumeData];
-//        } else {
-//            // iOS10之前
-//            self.downloadTask = [self.backgroundSession downloadTaskWithResumeData:self.resumeData];
-//        }
-//        [self.downloadTask resume];
-////        self.resumeData = nil;
-//        // 正在下载中
-////        self.downloadState = DownloadStateDownloading;
-//        [self addMapWithURL:urlStr downloadState:DownloadStateDownloading resumeData:nil];
-//    }
-}
-
-- (void)xy_backgroundDownloadContinue {
-    
-    [self xy_backgroundDownloadContinue:nil];
-    
 }
 
 
-- (NSURLSession *)xy_backgroundDownloadConfigSession {
-    
-    return self.backgroundSession;
-}
 
 - (void)xy_registerLocalNotificationWithBlock:(void (^)(UILocalNotification *))block {
      [self localNotification];
@@ -217,11 +147,34 @@ typedef void(^CompletionHandler)();
     return YES;
 }
 
-- (void)xy_clear {
-    // 主要目的是清除代理，防止奔溃
-    if (self.backgroundDownloadDelegate) {
-        self.backgroundDownloadDelegate = nil;
+- (void)xy_release {
+    if (self.downloadResumeDataDict) {
+        [self.downloadResumeDataDict removeAllObjects];
     }
+}
+
+
+- (void)xy_releaseByURL:(NSString *)url {
+    [self removeMapFromURL:url];
+}
+
+
+- (NSURLSession *)xy_backgroundDownloadConfigSession {
+    
+    return self.backgroundSession;
+}
+
+#pragma mark - 过期
+- (void)xy_backgroundDownloadPause {
+    
+    [self xy_backgroundDownloadPause:nil];
+    
+}
+
+- (void)xy_backgroundDownloadContinue {
+    
+    [self xy_backgroundDownloadContinue:nil];
+    
 }
 
 #pragma mark - NSURLSessionDownloadDelegate 
@@ -407,6 +360,43 @@ typedef void(^CompletionHandler)();
 
 #pragma mark - Private
 
+- (void)startDownload:(NSString *)urlStr {
+    NSURL *url = [NSURL URLWithString:urlStr];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    // 下载任务
+    self.downloadTask  = [self.backgroundSession downloadTaskWithRequest:request];
+    [self.downloadTask resume];
+    
+    // 保存当前的下载路径
+    self.currentDownloadURL = urlStr;
+    
+    // 将任务resumeData urlStr 关联起来, 若没有resumeData 则用-1关联
+    [self addMapWithURL:urlStr downloadState:DownloadStateDownloading resumeData:nil];
+}
+
+- (void)addMapWithURL:(NSString *)urlStr downloadState:(DownloadState)state resumeData:(NSData *)resumeData {
+    
+    id data = nil;
+    if (resumeData == nil) {
+        data = @(-1);
+    } else {
+        data = resumeData;
+    }
+    
+    // 将任务resumeData urlStr 关联起来, 若没有resumeData 则用-1关联
+    [self.downloadResumeDataDict setObject:@{XYDownloadResumeDataKey:data, XYDownloadStateKey: @(DownloadStateDownloading)} forKey:urlStr];
+    
+    
+    // 发布状态发生改变的通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:XYDownloadStateNotification object:urlStr userInfo:@{XYDownloadStateKey: @(state)}];
+}
+
+- (void)removeMapFromURL:(NSString *)urlStr {
+    if (urlStr && urlStr.length) {
+        [self.downloadResumeDataDict removeObjectForKey:urlStr];
+    }
+}
+
 /// 保存block到completionHandlerDict中
 - (void)addCompletionHandler:(CompletionHandler)handler identifier:(NSString *)identifier {
     
@@ -436,11 +426,6 @@ typedef void(^CompletionHandler)();
 //    NSLog(@"%@", [NSThread currentThread]);
     // 发布通知 回到主线程
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        
-        if (self.backgroundDownloadDelegate && [self.backgroundDownloadDelegate respondsToSelector:@selector(xy_backgroundDownload:downloadprogressDidChange:)]) {
-            [self.backgroundDownloadDelegate xy_backgroundDownload:self downloadprogressDidChange:progress];
-        }
-        
         
         NSDictionary *info = @{XYDownloadProgress: progress, XYDownloadURL: self.currentDownloadURL};
         
@@ -476,7 +461,6 @@ typedef void(^CompletionHandler)();
                                                 delegate:self
                                            delegateQueue:[NSOperationQueue new]]);
     });
-//    NSLog(@"%@", session);
     return session;
 }
 
@@ -489,12 +473,12 @@ typedef void(^CompletionHandler)();
     return objc_getAssociatedObject(self, @selector(downloadTask));
 }
 
-- (void)setResumeData:(NSData *)resumeData {
-    objc_setAssociatedObject(self, @selector(resumeData), resumeData, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-- (NSData *)resumeData {
-    return objc_getAssociatedObject(self, @selector(resumeData));
-}
+//- (void)setResumeData:(NSData *)resumeData {
+//    objc_setAssociatedObject(self, @selector(resumeData), resumeData, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//}
+//- (NSData *)resumeData {
+//    return objc_getAssociatedObject(self, @selector(resumeData));
+//}
 
 - (void)setLocalNotification:(UILocalNotification *)localNotification {
     objc_setAssociatedObject(self, @selector(localNotification), localNotification, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -536,36 +520,25 @@ typedef void(^CompletionHandler)();
     return dict;
 }
 
-- (void)setBackgroundDownloadDelegate:(id<XYBackgroundDownloadProtocol>)backgroundDownloadDelegate {
-    objc_setAssociatedObject(self, @selector(backgroundDownloadDelegate), backgroundDownloadDelegate, OBJC_ASSOCIATION_ASSIGN);
-}
 
-- (id<XYBackgroundDownloadProtocol>)backgroundDownloadDelegate {
-    return objc_getAssociatedObject(self, @selector(backgroundDownloadDelegate));
-}
+//- (void)setDownloadState:(DownloadState)downloadState {
+//    objc_setAssociatedObject(self, @selector(downloadState), @(downloadState), OBJC_ASSOCIATION_ASSIGN);
+//    
+//    // 发布状态发生改变的通知
+//    [[NSNotificationCenter defaultCenter] postNotificationName:XYDownloadStateNotification object:self.currentDownloadURL userInfo:@{XYDownloadStateKey: @(downloadState)}];
+//    
+//}
+//- (DownloadState)downloadState {
+//    return [objc_getAssociatedObject(self, @selector(downloadState)) integerValue] ?: DownloadStateUnknown;
+//}
 
-- (void)setDownloadState:(DownloadState)downloadState {
-    objc_setAssociatedObject(self, @selector(downloadState), @(downloadState), OBJC_ASSOCIATION_ASSIGN);
-    
-    if (self.backgroundDownloadDelegate && [self.backgroundDownloadDelegate respondsToSelector:@selector(xy_backgroundDownload:downloadStateDidChange:)]) {
-        [self.backgroundDownloadDelegate xy_backgroundDownload:self downloadStateDidChange:downloadState];
-    }
-    
-    // 发布状态发生改变的通知
-    [[NSNotificationCenter defaultCenter] postNotificationName:XYDownloadStateNotification object:self.currentDownloadURL userInfo:@{XYDownloadStateKey: @(downloadState)}];
-    
-}
-- (DownloadState)downloadState {
-    return [objc_getAssociatedObject(self, @selector(downloadState)) integerValue] ?: DownloadStateUnknown;
-}
-
-- (void)setDownProgress:(NSString *)downProgress {
-    objc_setAssociatedObject(self, @selector(downProgress), downProgress, OBJC_ASSOCIATION_COPY_NONATOMIC);
-}
-
-- (NSString *)downProgress {
-    return objc_getAssociatedObject(self, @selector(downProgress));
-}
+//- (void)setDownProgress:(NSString *)downProgress {
+//    objc_setAssociatedObject(self, @selector(downProgress), downProgress, OBJC_ASSOCIATION_COPY_NONATOMIC);
+//}
+//
+//- (NSString *)downProgress {
+//    return objc_getAssociatedObject(self, @selector(downProgress));
+//}
 
 
 - (void)setDownloadResumeDataDict:(NSMutableDictionary *)downloadResumeDataDict {

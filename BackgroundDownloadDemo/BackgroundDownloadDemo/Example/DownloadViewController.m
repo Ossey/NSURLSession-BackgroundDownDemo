@@ -10,7 +10,7 @@
 #import "AppDelegate+XYBackgroundTask.h"
 #import "Download2ViewController.h"
 
-@interface DownloadViewController () <XYBackgroundDownloadProtocol>
+@interface DownloadViewController () 
 
 @property (weak, nonatomic) IBOutlet UILabel *progressLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
@@ -37,17 +37,6 @@
     [self.navigationController pushViewController:[Download2ViewController new] animated:YES];
 }
 
-#pragma mark - XYBackgroundDownloadProtocol
-// 代理方式 获取下载进度
-//- (void)xy_backgroundDownload:(id)objc downloadprogressDidChange:(NSString *)progress {
-//    
-//    CGFloat fProgress = [progress floatValue];
-//    
-//    self.progressLabel.text = [NSString stringWithFormat:@"%.2f%%",fProgress * 100];
-//    self.progressView.progress = fProgress;
-//    
-////    NSLog(@"%@", [NSThread currentThread]);
-//}
 
 #pragma mark - notify 
 - (void)updateDownloadProgress:(NSNotification *)note {
