@@ -49,7 +49,9 @@
             __weak typeof(self) weakSelf = self;
             NSString *url = @"http://106.2.184.232:9999/sw.bos.baidu.com/sw-search-sp/software/f4ec363a68914/bdbrowserSetup-8.7.100.4208-4580_11000003.exe";
             [[XYBackgroundSession sharedInstance] xy_download:url progress:^(CGFloat totalBytesWritten, CGFloat totalBytesExpectedToWrite, NSString *downProgress) {
+                
                 [weakSelf downloadProgress:downProgress];
+                
             } success:^(NSURLSessionDownloadTask *task, NSString *filePath) {
                 NSLog(@"%@", filePath);
                 
@@ -74,7 +76,6 @@
 
 - (void)downloadProgress:(NSString *)progress {
     
-    
     CGFloat fProgress = [progress floatValue];
     self.progressLabel.text = [NSString stringWithFormat:@"%.2f%%",fProgress * 100];
     self.progressView.progress = fProgress;
@@ -88,7 +89,6 @@
             break;
         case DownloadStateDownloading:
             [self.downBtn setTitle:@"暂停" forState:UIControlStateSelected];
-            
             break;
         case DownloadStateFinish:
             self.selected = NO;

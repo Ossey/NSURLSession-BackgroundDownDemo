@@ -25,7 +25,9 @@
 @implementation AppDelegate (XYBackgroundTask)
 
 - (void)registerLocalNotificationWithBlock:(void (^)(UILocalNotification *))block {
+    
     [self localNotification];
+    
     if (block) {
         block(self.localNotification);
     }

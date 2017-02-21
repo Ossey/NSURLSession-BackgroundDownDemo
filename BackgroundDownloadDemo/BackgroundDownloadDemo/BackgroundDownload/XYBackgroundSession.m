@@ -70,10 +70,6 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
         return;
     }
     
-//    if (!self.backgroundSession) {
-//        self.backgroundSession = self.backgroundSession;
-//    }
-    
     NSURL *url = [NSURL URLWithString:urlStr];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
@@ -171,57 +167,9 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
     NSString *finalPath = [self.finalDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", downloadTask.response.suggestedFilename]];
     
     NSFileManager *fileManage = [NSFileManager defaultManager];
-    // 判断将要保存的文件是否存在，如果存在，就先删除存在的
-    if ([fileManage fileExistsAtPath:finalPath]) {
-        NSError *removeError = nil;
-        [fileManage removeItemAtPath:finalPath error:&removeError];
-        if (removeError) {
-            // 当文件删除成功后，就移动文件到最终路径
-            // 将文件从临时文件夹移动到最终文件中
-            NSError *moveError;
-            [[NSFileManager defaultManager] moveItemAtPath:locationPath toPath:finalPath error:&moveError];
-            if (moveError) {
-                
-                self.downloadState = DownloadStateFailure;
-                
-                NSLog(@"文件移动失败,%@", moveError.localizedDescription);
-                if (self.failureBlock) {
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                        self.failureBlock(moveError);
-                    }];
-                }
-                [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:@"下载完成，但本地已存在"];
-                return;
-                
-            } else {
-                
-                self.downloadState = DownloadStateFinish;
-                
-                NSLog(@"文件移动成功");
-                // 下载完成，执行block
-                if (self.successBlock) {
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                        self.successBlock(downloadTask, finalPath);
-                    }];
-                }
-            }
-        
-        } else {
-        
-            self.downloadState = DownloadStateFailure;
-            
-            // 文件移动失败，执行失败的block
-            if (self.failureBlock) {
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    self.failureBlock(removeError);
-                }];
-                
-            }
-            [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:@"下载完成，但本地已存在"];
-            return;
-        }
-    } else {
-        
+    // 判断将要保存的文件是否存在，如果不存在，就直接移动过去，文件存在就不必移动了
+    if (![fileManage fileExistsAtPath:finalPath]) {
+
         // 文件不存在，直接移动过去
         NSError *moveError;
         [[NSFileManager defaultManager] moveItemAtPath:locationPath toPath:finalPath error:&moveError];
@@ -232,9 +180,7 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
                     self.failureBlock(moveError);
                 }];
             }
-            [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:@"下载完成，但本地已存在"];
-            return;
-
+            
         } else {
             
             self.downloadState = DownloadStateFinish;
@@ -245,13 +191,11 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
                     self.successBlock(downloadTask, finalPath);
                 }];
             }
-
+            
         }
+        
     }
    
-    
-    // 发送下载完成的本地通知
-    [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:@"下载完成啦"];
 
 }
 
@@ -335,6 +279,15 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
                 }];
             }
         }
+    } else {
+        // 发送本地通知
+        [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:nil];
+        // 下载完成后发布通知为1，即百分之百
+        if (self.progressBlock) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                self.progressBlock(0, 0, @"1");
+            }];
+        }
     }
 }
 
@@ -388,5 +341,99 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
 
 }
 
+
+- (void):(NSURL *)location {
+//    //    NSLog(@"%@", [NSThread currentThread]);
+//    
+//    // 获取文件临时存放的路径
+//    NSString *locationPath = [location path];
+//    // 设置最终存放的路径在Doucument中
+//    NSString *finalPath = [self.finalDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", downloadTask.response.suggestedFilename]];
+//    
+//    NSFileManager *fileManage = [NSFileManager defaultManager];
+//    // 判断将要保存的文件是否存在，如果存在，就先删除存在的
+//    if ([fileManage fileExistsAtPath:finalPath]) {
+//                NSError *removeError = nil;
+//                [fileManage removeItemAtPath:finalPath error:&removeError];
+//                if (removeError) {
+//                    // 当文件删除成功后，就移动文件到最终路径
+//                    // 将文件从临时文件夹移动到最终文件中
+//                    NSError *moveError;
+//                    [[NSFileManager defaultManager] moveItemAtPath:locationPath toPath:finalPath error:&moveError];
+//                    if (moveError) {
+//        
+//                        self.downloadState = DownloadStateFailure;
+//        
+//                        NSLog(@"文件移动失败,%@", moveError.localizedDescription);
+//                        if (self.failureBlock) {
+//                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//                                self.failureBlock(moveError);
+//                            }];
+//                        }
+//                        [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:@"下载完成，但本地已存在"];
+//                        return;
+//        
+//                    } else {
+//        
+//                        self.downloadState = DownloadStateFinish;
+//        
+//                        NSLog(@"文件移动成功");
+//                        // 下载完成，执行block
+//                        if (self.successBlock) {
+//                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//                                self.successBlock(downloadTask, finalPath);
+//                            }];
+//                        }
+//                    }
+//        
+//    } else {
+//        
+//        self.downloadState = DownloadStateFailure;
+//        
+//        // 文件移动失败，执行失败的block
+//        if (self.failureBlock) {
+//            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//                self.failureBlock(removeError);
+//            }];
+//            
+//        }
+//        [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:@"下载完成，但本地已存在"];
+//        return;
+//    }
+//} else {
+//    
+//    // 文件不存在，直接移动过去
+//    NSError *moveError;
+//    [[NSFileManager defaultManager] moveItemAtPath:locationPath toPath:finalPath error:&moveError];
+//    if (moveError) {
+//        NSLog(@"文件移动失败,%@", moveError.localizedDescription);
+//        if (self.failureBlock) {
+//            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//                self.failureBlock(moveError);
+//            }];
+//        }
+//        [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:@"下载完成，但本地已存在"];
+//        return;
+//        
+//    } else {
+//        
+//        self.downloadState = DownloadStateFinish;
+//        NSLog(@"文件移动成功");
+//        // 下载完成，执行block
+//        if (self.successBlock) {
+//            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//                self.successBlock(downloadTask, finalPath);
+//            }];
+//        }
+//        
+//    }
+//}
+//
+//if (self.progressBlock) {
+//    self.progressBlock(0, 0, @"1");
+//}
+//// 发送下载完成的本地通知
+//[(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:@"下载完成啦"];
+}
 
 @end

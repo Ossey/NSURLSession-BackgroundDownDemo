@@ -21,8 +21,10 @@
 
     [self.window makeKeyAndVisible];
     
+//    NSString *filePath = @"/Users/mofeini/Desktop/tomcat/sey";
+    
     /// 配置后台下载任务的会话对象
-    [[XYBackgroundSession sharedInstance] xy_configBackgroundDownloadSessionWithFinalDirectory:@"/Users/mofeini/Desktop/tomcat/sey"];
+    [[XYBackgroundSession sharedInstance] xy_configBackgroundDownloadSessionWithFinalDirectory:nil];
     
     /// 注册本地通知
     [self registerLocalNotificationWithBlock:^(UILocalNotification *localNotification) {
