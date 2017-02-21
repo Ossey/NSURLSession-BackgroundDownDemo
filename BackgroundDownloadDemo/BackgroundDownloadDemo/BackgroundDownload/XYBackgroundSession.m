@@ -57,9 +57,6 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
 
 - (void)beginDownload:(NSString *)urlStr {
     
-    NSURL *url = [NSURL URLWithString:urlStr];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
     // 解决重复点击下载的问题
     if (self.downloadState == DownloadStateDownloading) {
         // 正在下载中就不再重复下载了
@@ -72,6 +69,13 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
         [self xy_continueDownload];
         return;
     }
+    
+//    if (!self.backgroundSession) {
+//        self.backgroundSession = self.backgroundSession;
+//    }
+    
+    NSURL *url = [NSURL URLWithString:urlStr];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
     // 下载任务
     self.downloadTask  = [self.backgroundSession downloadTaskWithRequest:request];
@@ -232,8 +236,7 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
     
     // 发送下载完成的本地通知
     [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotification];
-    
-    [self xy_release];
+
 }
 
 /**
