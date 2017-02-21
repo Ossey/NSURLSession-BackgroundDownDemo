@@ -92,7 +92,7 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
     }];
     
     
-    NSLog(@"%@", self.downloadTask);
+//    NSLog(@"%@", self.downloadTask);
 }
 
 - (void)xy_continueDownload {
@@ -228,8 +228,6 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
 
         }
     }
-    
-    
    
     
     // 发送下载完成的本地通知

@@ -36,7 +36,7 @@
 
 - (IBAction)jumpTo2Vc:(id)sender {
     
-    [self.navigationController pushViewController:[Download2ViewController new] animated:YES];
+//    [self.navigationController pushViewController:[Download2ViewController new] animated:YES];
 }
 
 
