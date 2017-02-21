@@ -11,7 +11,7 @@
 		18686B721E595DD600671D89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18686B711E595DD600671D89 /* Assets.xcassets */; };
 		18686B751E595DD600671D89 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18686B731E595DD600671D89 /* LaunchScreen.storyboard */; };
 		18686B9B1E59B5D100671D89 /* AppDelegate+XYBackgroundTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686B981E59B5D100671D89 /* AppDelegate+XYBackgroundTask.m */; };
-		18686B9C1E59B5D100671D89 /* NSURLSession+XYResumeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686B9A1E59B5D100671D89 /* NSURLSession+XYResumeData.m */; };
+		18686B9C1E59B5D100671D89 /* NSURLSession+CorrectedResumeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686B9A1E59B5D100671D89 /* NSURLSession+CorrectedResumeData.m */; };
 		18686BA91E59B65B00671D89 /* AppDelegate+XYWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686BA11E59B65B00671D89 /* AppDelegate+XYWindow.m */; };
 		18686BAA1E59B65B00671D89 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686BA31E59B65B00671D89 /* AppDelegate.m */; };
 		18686BAB1E59B65B00671D89 /* DownButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686BA51E59B65B00671D89 /* DownButton.m */; };
@@ -20,6 +20,7 @@
 		18686BB91E59C5BB00671D89 /* DownloadViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686BB71E59C5BB00671D89 /* DownloadViewCell.m */; };
 		18686BBA1E59C5BB00671D89 /* DownloadViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18686BB81E59C5BB00671D89 /* DownloadViewCell.xib */; };
 		18686BBD1E59CB0F00671D89 /* Download2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686BBC1E59CB0F00671D89 /* Download2ViewController.m */; };
+		18686BC01E5BF4C900671D89 /* XYBackgroundSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 18686BBF1E5BF4C900671D89 /* XYBackgroundSession.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,8 +31,8 @@
 		18686B761E595DD600671D89 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18686B971E59B5D100671D89 /* AppDelegate+XYBackgroundTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+XYBackgroundTask.h"; sourceTree = "<group>"; };
 		18686B981E59B5D100671D89 /* AppDelegate+XYBackgroundTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+XYBackgroundTask.m"; sourceTree = "<group>"; };
-		18686B991E59B5D100671D89 /* NSURLSession+XYResumeData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSession+XYResumeData.h"; sourceTree = "<group>"; };
-		18686B9A1E59B5D100671D89 /* NSURLSession+XYResumeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLSession+XYResumeData.m"; sourceTree = "<group>"; };
+		18686B991E59B5D100671D89 /* NSURLSession+CorrectedResumeData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSession+CorrectedResumeData.h"; sourceTree = "<group>"; };
+		18686B9A1E59B5D100671D89 /* NSURLSession+CorrectedResumeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLSession+CorrectedResumeData.m"; sourceTree = "<group>"; };
 		18686B9D1E59B5E500671D89 /* XYBackgroundDownloadProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XYBackgroundDownloadProtocol.h; sourceTree = "<group>"; };
 		18686BA01E59B65B00671D89 /* AppDelegate+XYWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+XYWindow.h"; sourceTree = "<group>"; };
 		18686BA11E59B65B00671D89 /* AppDelegate+XYWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+XYWindow.m"; sourceTree = "<group>"; };
@@ -47,6 +48,8 @@
 		18686BB81E59C5BB00671D89 /* DownloadViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DownloadViewCell.xib; sourceTree = "<group>"; };
 		18686BBB1E59CB0F00671D89 /* Download2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Download2ViewController.h; sourceTree = "<group>"; };
 		18686BBC1E59CB0F00671D89 /* Download2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Download2ViewController.m; sourceTree = "<group>"; };
+		18686BBE1E5BF4C900671D89 /* XYBackgroundSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYBackgroundSession.h; sourceTree = "<group>"; };
+		18686BBF1E5BF4C900671D89 /* XYBackgroundSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYBackgroundSession.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,8 +106,10 @@
 				18686B9D1E59B5E500671D89 /* XYBackgroundDownloadProtocol.h */,
 				18686B971E59B5D100671D89 /* AppDelegate+XYBackgroundTask.h */,
 				18686B981E59B5D100671D89 /* AppDelegate+XYBackgroundTask.m */,
-				18686B991E59B5D100671D89 /* NSURLSession+XYResumeData.h */,
-				18686B9A1E59B5D100671D89 /* NSURLSession+XYResumeData.m */,
+				18686B991E59B5D100671D89 /* NSURLSession+CorrectedResumeData.h */,
+				18686B9A1E59B5D100671D89 /* NSURLSession+CorrectedResumeData.m */,
+				18686BBE1E5BF4C900671D89 /* XYBackgroundSession.h */,
+				18686BBF1E5BF4C900671D89 /* XYBackgroundSession.m */,
 			);
 			path = BackgroundDownload;
 			sourceTree = "<group>";
@@ -213,9 +218,10 @@
 			files = (
 				18686BB91E59C5BB00671D89 /* DownloadViewCell.m in Sources */,
 				18686BBD1E59CB0F00671D89 /* Download2ViewController.m in Sources */,
-				18686B9C1E59B5D100671D89 /* NSURLSession+XYResumeData.m in Sources */,
+				18686B9C1E59B5D100671D89 /* NSURLSession+CorrectedResumeData.m in Sources */,
 				18686BAC1E59B65B00671D89 /* DownloadViewController.m in Sources */,
 				18686BA91E59B65B00671D89 /* AppDelegate+XYWindow.m in Sources */,
+				18686BC01E5BF4C900671D89 /* XYBackgroundSession.m in Sources */,
 				18686B9B1E59B5D100671D89 /* AppDelegate+XYBackgroundTask.m in Sources */,
 				18686B671E595DD600671D89 /* main.m in Sources */,
 				18686BAA1E59B65B00671D89 /* AppDelegate.m in Sources */,

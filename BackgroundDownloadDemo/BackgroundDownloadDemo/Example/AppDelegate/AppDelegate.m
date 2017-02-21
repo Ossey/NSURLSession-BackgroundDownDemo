@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "AppDelegate+XYBackgroundTask.h"
+#import "XYBackgroundSession.h"
 
 @interface AppDelegate ()
 
@@ -21,10 +22,10 @@
     [self.window makeKeyAndVisible];
     
     /// 配置后台下载任务的会话对象
-    [self xy_backgroundDownloadConfigSession];
+    [[XYBackgroundSession sharedInstance] xy_configBackgroundDownloadSessionWithFinalDirectory:@"/Users/mofeini/Desktop/tomcat/sey"];
     
     /// 注册本地通知
-    [self xy_registerLocalNotificationWithBlock:^(UILocalNotification *localNotification) {
+    [self registerLocalNotificationWithBlock:^(UILocalNotification *localNotification) {
         /// 注册完成后回调
         
         NSLog(@"%@", localNotification);

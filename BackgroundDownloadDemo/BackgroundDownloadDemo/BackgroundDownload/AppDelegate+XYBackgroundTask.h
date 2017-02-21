@@ -9,14 +9,24 @@
 #import "AppDelegate.h"
 #import "XYBackgroundDownloadProtocol.h"
 
-extern NSString *const XYDownloadProgressNotification;
-extern NSString *const XYDownloadStateNotification;
-extern NSString *const XYDownloadProgress;
-extern NSString *const XYDownloadURL;
-extern NSString *const XYDownloadStateKey;
+typedef void(^CompletionHandler)();
 
-@interface AppDelegate (XYBackgroundTask) <XYBackgroundDownloadProtocol>
+@interface AppDelegate (XYBackgroundTask)
 
-/// 使用代理的问题: 一个代理多次赋值代理对象时(同一个属性进行多次赋值，那必须是最后一次赋值生效)，AppDelegate对象始终只有一个，不管设置多少个backgroundDownloadDelegate都会被覆盖到只有一个，所以暂时先使用通知
+/// 取出handleEventsForBackgroundURLSession方法中保存的block，若存在就执行block
+- (void)callCompletionHandlerForSession:(NSString *)identifier;
+
+/// 保存block到completionHandlerDict中
+- (void)addCompletionHandler:(CompletionHandler)handler identifier:(NSString *)identifier;
+
+/**
+ * 注册本地通知, 此方法需要在application: didFinishLaunchingWithOptions中掉用
+ *
+ * @param   block  通过block回调一个已经注册过本地通知的localNotification对象
+ */
+- (void)registerLocalNotificationWithBlock:(void (^)(UILocalNotification *))block;
+
+/// 发送本地通知
+- (void)sendLocalNotification;
 
 @end

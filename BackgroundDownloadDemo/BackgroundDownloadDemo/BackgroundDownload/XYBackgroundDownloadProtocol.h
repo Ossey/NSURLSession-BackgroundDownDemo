@@ -6,7 +6,7 @@
 //  Copyright © 2017年 com.test.demo. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 /// 定义下载状态
 typedef NS_ENUM(NSInteger, DownloadState) {
@@ -15,48 +15,59 @@ typedef NS_ENUM(NSInteger, DownloadState) {
     DownloadStateFinish,           // 下载完成
     DownloadStateFailure,          // 下载失败
     DownloadStateUnknown,          // 未知
-//    DownloadStateBackground        // 后台下载
+    DownloadStateResume,           // 恢复下载
 };
+
+/// filePath文件最终存放的路径
+typedef void(^SuccessBlock)(NSURLSessionDownloadTask *task, NSString *filePath);
+
+typedef void(^FailureBlock)(NSError *error);
+
+/// totalBytesWritten已经下载并写入的文件大小，
+/// 文件的总大写totalBytesExpectedToWrite
+/// downProgress 下载进度0.00~1.00
+typedef void(^ProgressBlock)(CGFloat totalBytesWritten, CGFloat totalBytesExpectedToWrite, NSString *downProgress);
+typedef void(^DownloadStateBlock)(DownloadState state);
 
 @protocol XYBackgroundDownloadProtocol <NSObject>
 
 @optional
+
 /**
- * 开始下载
+ * 下载 可在后台下载
  *
- * @param   urlStr  下载文件的url路径
+ * @param   urlStr  下载url
+ * @param   progress  下载进度回调
+ * @param   success  下载成功并且成功从tmp中移动到指定的路径成功后回调
+ * @param  failure   下载失败或文件下载成功但从tmp移动到其他指定路径失败后回调
  */
-- (void)xy_backgroundDownloadBeginWithURL:(NSString *)urlStr;
+- (void)xy_download:(NSString *)urlStr
+             progress:(ProgressBlock)progress
+              success:(SuccessBlock)success
+              failure:(FailureBlock)failure;
+
 
 /// 暂停下载
-- (void)xy_backgroundDownloadPause __attribute__((deprecated("已过期, 请使用:- xy_backgroundDownloadPause:")));
+- (void)xy_pauseDownload;
 
 /// 继续下载
-- (void)xy_backgroundDownloadContinue __attribute__((deprecated("已过期,请使用:- xy_backgroundDownloadContinue:")));
+- (void)xy_continueDownload;
 
-/// 暂停下载，当有多个文件同时下载时，根据urlStr暂停下载
-- (void)xy_backgroundDownloadPause:(NSString *)urlStr;
-
-/// 继续下载，当有多个文件同时下载时，根据urlStr继续下载
-- (void)xy_backgroundDownloadContinue:(NSString *)urlStr;
-
-/// 会话对象：实现后，在application: didFinishLaunchingWithOptions中调用
-- (NSURLSession *)xy_backgroundDownloadConfigSession;
-
+///
 /**
- * 注册本地通知, 此方法需要在application: didFinishLaunchingWithOptions中掉用
+ * 会话对象：配置后台会话对象，然后在application: didFinishLaunchingWithOptions中调用
  *
- * @param   block  通过block回调一个已经注册过本地通知的localNotification对象
+ * @param   fileDirectory  下载后的文件保存的路径, 默认是存储在沙盒caches中的com_sey_background目录下
+ * @return  NSURLSession background
  */
-- (void)xy_registerLocalNotificationWithBlock:(void (^)(UILocalNotification *localNotification))block;
+- (NSURLSession *)xy_configBackgroundDownloadSessionWithFinalDirectory:(NSString *)fileDirectory;
 
 /// 判断是否是有效的resumeData
 - (BOOL)xy_isValideResumeData:(NSData *)resumeData;
 
-/// 清除所有下载任务及缓存的resumeData
-- (void)xy_releaseAll;
+/// 下载状态改变时回调
+- (void)xy_downloadState:(DownloadStateBlock)state;
 
-/// 清除url对应的下载任务及缓存的resumeData
-- (void)xy_releaseByURL:(NSString *)url;
-
+/// 释放资源
+- (void)xy_release;
 @end

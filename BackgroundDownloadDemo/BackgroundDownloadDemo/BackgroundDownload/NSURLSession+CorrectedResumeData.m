@@ -1,12 +1,12 @@
 //
-//  NSURLSession+XYResumeData.m
+//  NSURLSession+CorrectedResumeData.m
 //  BackgroundDownloadDemo
 //
 //  Created by mofeini on 17/2/19.
 //  Copyright © 2017年 com.test.demo. All rights reserved.
 //
 
-#import "NSURLSession+XYResumeData.h"
+#import "NSURLSession+CorrectedResumeData.h"
 
 
 #define IS_IOS10_AFTER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10)
@@ -110,7 +110,7 @@ static NSData *correctResumeData(NSData *data) {
     return result;
 }
 
-@implementation NSURLSession (XYResumeData)
+@implementation NSURLSession (CorrectedResumeData)
 
 - (NSURLSessionDownloadTask *)xy_downloadTaskWithResumeData:(NSData *)resumeData {
     

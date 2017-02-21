@@ -1,5 +1,5 @@
 //
-//  NSURLSession+XYResumeData.h
+//  NSURLSession+CorrectedResumeData.h
 //  BackgroundDownloadDemo
 //
 //  Created by mofeini on 17/2/19.
@@ -8,10 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NSURLSession (XYResumeData)
+@interface NSURLSession (CorrectedResumeData)
 
-/// 根据resumeData继续下载任务
-/// 针对iOS10以后对resumeData进行处理
+/**
+ * 根据resumeData继续下载任务
+ *
+ * @param   resumeData  针对iOS10以后对resumeData进行处理
+ * @return  NSURLSessionDownloadTask
+ */
 - (NSURLSessionDownloadTask *)xy_downloadTaskWithResumeData:(NSData *)resumeData;
 
 @end
