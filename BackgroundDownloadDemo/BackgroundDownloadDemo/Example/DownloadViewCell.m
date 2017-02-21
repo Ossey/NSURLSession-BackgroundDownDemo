@@ -8,7 +8,8 @@
 
 #import "DownloadViewCell.h"
 #import "DownButton.h"
-#import "AppDelegate+XYBackgroundTask.h"
+#import "XYBackgroundSession.h"
+#import "AppDelegate.h"
 
 @interface DownloadViewCell () <XYBackgroundDownloadProtocol>
 
@@ -17,7 +18,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *fileSize;
 @property (weak, nonatomic) IBOutlet UILabel *progressLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
-@property (nonatomic, weak) AppDelegate *app;
 
 @property (nonatomic, assign) BOOL isFirst;
 
@@ -29,41 +29,50 @@
     [super awakeFromNib];
     
     [self.downBtn addTarget:self action:@selector(download:) forControlEvents:UIControlEventTouchUpInside];
-//    self.app.backgroundDownloadDelegate = self;
     self.isFirst = YES;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.downBtn.tintColor = [UIColor clearColor];
+    
+    __weak typeof(self) weakSelf = self;
+    [[XYBackgroundSession sharedInstance] xy_downloadState:^(DownloadState state) {
+        [weakSelf downloadStateDidChange:state];
+    }];
 }
 
-//- (void)download:(UIButton *)btn {
-//    
-//    if (!btn.selected) {
-//        
-//        // 只要第一次才开始下载，其他都是继续下载
-//        if (self.isFirst == YES) {
-//            // 开始下载
-//            [self.app xy_backgroundDownloadBeginWithURL:@"https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg"];
-//            
-//        } else {
-//            // 继续下载
-//            [self.app xy_backgroundDownloadContinue];
-//        }
-//        
-//    } else {
-//        // 暂停
-//        [self.app xy_backgroundDownloadPause];
-//    }
-//    
-//    self.isFirst = NO;
-//    btn.selected = !btn.isSelected;
-//}
-
-- (AppDelegate *)app {
-    return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+- (void)download:(UIButton *)btn {
+    
+    if (!btn.selected) {
+        
+        // 只要第一次才开始下载，其他都是继续下载
+        if (self.isFirst == YES) {
+            // 开始下载
+            __weak typeof(self) weakSelf = self;
+            NSString *url = @"http://106.2.184.232:9999/sw.bos.baidu.com/sw-search-sp/software/f4ec363a68914/bdbrowserSetup-8.7.100.4208-4580_11000003.exe";
+            [[XYBackgroundSession sharedInstance] xy_download:url progress:^(CGFloat totalBytesWritten, CGFloat totalBytesExpectedToWrite, NSString *downProgress) {
+                [weakSelf downloadProgress:downProgress];
+            } success:^(NSURLSessionDownloadTask *task, NSString *filePath) {
+                NSLog(@"%@", filePath);
+                
+            } failure:^(NSError *error) {
+//                NSLog(@"%@", error);
+            }];
+            
+        } else {
+            // 继续下载
+            [[XYBackgroundSession sharedInstance] xy_continueDownload];
+        }
+        
+    } else {
+        // 暂停
+        [[XYBackgroundSession sharedInstance] xy_pauseDownload];
+    }
+    
+    self.isFirst = NO;
+    btn.selected = !btn.isSelected;
 }
 
-#pragma mark - XYBackgroundDownloadProtocol
-- (void)xy_backgroundDownload:(id)objc downloadprogressDidChange:(NSString *)progress {
+
+- (void)downloadProgress:(NSString *)progress {
     
     
     CGFloat fProgress = [progress floatValue];
@@ -71,7 +80,7 @@
     self.progressView.progress = fProgress;
 }
 
-- (void)xy_backgroundDownload:(id)objc downloadStateDidChange:(DownloadState)state {
+- (void)downloadStateDidChange:(DownloadState)state {
     
     switch (state) {
         case DownloadStatePause:
@@ -96,6 +105,9 @@
 
 - (void)dealloc {
     
+    [[XYBackgroundSession sharedInstance] xy_release];
+    
+    NSLog(@"%s", __func__);
 }
 
 @end

@@ -135,6 +135,7 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
     
     // 注意：session对象如果设置代理会有一个强引用，它是不会被释放掉的，需要调用以下方法释放,如果不释放会出现内存泄漏问题
     [self.backgroundSession finishTasksAndInvalidate];
+    self.backgroundSession = nil;
     
     self.successBlock = nil;
     self.progressBlock = nil;
@@ -158,31 +159,78 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
  */
 - (void)URLSession:(NSURLSession *)session downloadTask:(nonnull NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(nonnull NSURL *)location {
     
+//    NSLog(@"%@", [NSThread currentThread]);
+    
     // 获取文件临时存放的路径
     NSString *locationPath = [location path];
     // 设置最终存放的路径在Doucument中
     NSString *finalPath = [self.finalDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", downloadTask.response.suggestedFilename]];
     
-    // 将文件从临时文件夹移动到最终文件中
-    NSError *error;
-    [[NSFileManager defaultManager] moveItemAtPath:locationPath toPath:finalPath error:&error];
-    if (error) {
-        NSLog(@"文件移动失败,%@", error.localizedDescription);
-        if (self.failureBlock) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                self.failureBlock(error);
-            }];
-        }
+    NSFileManager *fileManage = [NSFileManager defaultManager];
+    // 判断将要保存的文件是否存在，如果存在，就先删除存在的
+    if ([fileManage fileExistsAtPath:finalPath]) {
+        NSError *removeError = nil;
+        [fileManage removeItemAtPath:finalPath error:&removeError];
+        if (removeError) {
+            // 当文件删除成功后，就移动文件到最终路径
+            // 将文件从临时文件夹移动到最终文件中
+            NSError *moveError;
+            [[NSFileManager defaultManager] moveItemAtPath:locationPath toPath:finalPath error:&moveError];
+            if (moveError) {
+                NSLog(@"文件移动失败,%@", moveError.localizedDescription);
+                if (self.failureBlock) {
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        self.failureBlock(moveError);
+                    }];
+                }
+                
+            } else {
+                NSLog(@"文件移动成功");
+                // 下载完成，执行block
+                if (self.successBlock) {
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        self.successBlock(downloadTask, finalPath);
+                    }];
+                }
+            }
         
+        } else {
+        
+            // 文件移动失败，执行失败的block
+            if (self.failureBlock) {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    self.failureBlock(removeError);
+                }];
+                
+            }
+        }
     } else {
-        NSLog(@"文件移动成功");
-        // 下载完成，执行block
-        if (self.successBlock) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                self.successBlock(downloadTask, finalPath);
-            }];
+        
+        // 文件不存在，直接移动过去
+        NSError *moveError;
+        [[NSFileManager defaultManager] moveItemAtPath:locationPath toPath:finalPath error:&moveError];
+        if (moveError) {
+            NSLog(@"文件移动失败,%@", moveError.localizedDescription);
+            if (self.failureBlock) {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    self.failureBlock(moveError);
+                }];
+            }
+
+        } else {
+            NSLog(@"文件移动成功");
+            // 下载完成，执行block
+            if (self.successBlock) {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    self.successBlock(downloadTask, finalPath);
+                }];
+            }
+
         }
     }
+    
+    
+   
     
     // 发送下载完成的本地通知
     [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotification];
@@ -252,21 +300,24 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
     
     if (error) {
         
-        // 执行下载失败的block
-        if (self.failureBlock) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                self.failureBlock(error);
-            }];
-        }
-        
         if ([error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData]) {
             NSData *resumeData = [error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
             //通过之前保存的resumeData，获取断点的NSURLSessionTask，调用resume恢复下载
             self.resumeData = resumeData;
         }
-        // 下载失败
-        self.downloadState = DownloadStateFailure;
         
+        if (![error.userInfo[NSLocalizedDescriptionKey] isEqualToString:@"cancelled"]) {
+            NSLog(@"%@",  error.userInfo[NSLocalizedDescriptionKey]);
+            // 下载失败的状态及下载失败的bloc回调，需要在不是用户取消的情况下执行，因为此方法，当用户消息下载时也会调用
+            self.downloadState = DownloadStateFailure;
+            
+            // 执行下载失败的block
+            if (self.failureBlock) {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    self.failureBlock(error);
+                }];
+            }
+        }
     }
 }
 
@@ -277,16 +328,15 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
     /// 创建一个后台下载对象 用dispatch_once创建一个用于后台下载对象，目的是为了保证identifier的唯一
     /// 文档不建议对于相同的标识符 (identifier) 创建多个会话对象。
     /// 这里创建并配置了NSURLSession，将通过backgroundSessionConfiguration其指定为后台session并设定delegate。
-    static NSURLSession *session = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    if (_backgroundSession == nil) {
         NSString *identifier = @"com.sey.backgroundSession";
         NSURLSessionConfiguration* sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
-        self.backgroundSession = (session = [NSURLSession sessionWithConfiguration:sessionConfig
+         _backgroundSession = [NSURLSession sessionWithConfiguration:sessionConfig
                                                                           delegate:self
-                                                                     delegateQueue:[NSOperationQueue new]]);
-    });
-    return session;
+                                                                     delegateQueue:[NSOperationQueue new]];
+    }
+    
+    return _backgroundSession;
 }
 
 #pragma mark - set \ get
