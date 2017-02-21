@@ -100,7 +100,8 @@
 }
 
 /// 发送本地通知
-- (void)sendLocalNotification {
+- (void)sendLocalNotificationWithMessage:(NSString *)m {
+    self.notifyMessage = m;
     [[UIApplication sharedApplication] scheduleLocalNotification:self.localNotification];
 }
 
@@ -124,6 +125,7 @@
     objc_setAssociatedObject(self, @selector(notifyMessage), notifyMessage, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 - (NSString *)notifyMessage {
+    
     return objc_getAssociatedObject(self, @selector(notifyMessage)) ?: @"下载完成了";
 }
 

@@ -181,14 +181,22 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
             NSError *moveError;
             [[NSFileManager defaultManager] moveItemAtPath:locationPath toPath:finalPath error:&moveError];
             if (moveError) {
+                
+                self.downloadState = DownloadStateFailure;
+                
                 NSLog(@"文件移动失败,%@", moveError.localizedDescription);
                 if (self.failureBlock) {
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                         self.failureBlock(moveError);
                     }];
                 }
+                [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:@"下载完成，但本地已存在"];
+                return;
                 
             } else {
+                
+                self.downloadState = DownloadStateFinish;
+                
                 NSLog(@"文件移动成功");
                 // 下载完成，执行block
                 if (self.successBlock) {
@@ -200,6 +208,8 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
         
         } else {
         
+            self.downloadState = DownloadStateFailure;
+            
             // 文件移动失败，执行失败的block
             if (self.failureBlock) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -207,6 +217,8 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
                 }];
                 
             }
+            [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:@"下载完成，但本地已存在"];
+            return;
         }
     } else {
         
@@ -220,8 +232,12 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
                     self.failureBlock(moveError);
                 }];
             }
+            [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:@"下载完成，但本地已存在"];
+            return;
 
         } else {
+            
+            self.downloadState = DownloadStateFinish;
             NSLog(@"文件移动成功");
             // 下载完成，执行block
             if (self.successBlock) {
@@ -235,7 +251,7 @@ NSString *const XYDownloadProgressNotification = @"XYDownloadProgressNotificatio
    
     
     // 发送下载完成的本地通知
-    [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotification];
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] sendLocalNotificationWithMessage:@"下载完成啦"];
 
 }
 

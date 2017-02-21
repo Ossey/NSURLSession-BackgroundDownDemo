@@ -8,7 +8,7 @@
 
 #import "AppDelegate+XYWindow.h"
 #import <objc/runtime.h>
-#import "DownloadViewController.h"
+#import "Download2ViewController.h"
 #import "AppDelegate+XYBackgroundTask.h"
 
 
@@ -24,7 +24,7 @@
     UIWindow *w = objc_getAssociatedObject(self, @selector(window));
     if (w == nil) {
         self.window = (w = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds]);
-        DownloadViewController *vc = [DownloadViewController new];
+        Download2ViewController *vc = [Download2ViewController new];
 //        __weak typeof(self) weakSelf = self;
 //       weakSelf.backgroundDownloadDelegate = vc;
         w.rootViewController = [[UINavigationController alloc] initWithRootViewController:vc];

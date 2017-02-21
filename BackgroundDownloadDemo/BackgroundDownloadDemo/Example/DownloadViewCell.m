@@ -54,7 +54,7 @@
                 NSLog(@"%@", filePath);
                 
             } failure:^(NSError *error) {
-//                NSLog(@"%@", error);
+                NSLog(@"%@", error);
             }];
             
         } else {
@@ -91,8 +91,9 @@
             
             break;
         case DownloadStateFinish:
-            [self.downBtn setTitle:@"下载完成" forState:UIControlStateSelected];
-            self.downBtn.selected = YES;
+            self.selected = NO;
+            [self.downBtn setTitle:@"下载完成" forState:UIControlStateNormal];
+            
             break;
         case DownloadStateFailure:
             [self.downBtn setTitle:@"再试一次" forState:UIControlStateNormal];

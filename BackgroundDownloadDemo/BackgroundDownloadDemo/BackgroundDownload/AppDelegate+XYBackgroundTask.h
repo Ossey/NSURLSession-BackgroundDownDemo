@@ -27,6 +27,6 @@ typedef void(^CompletionHandler)();
 - (void)registerLocalNotificationWithBlock:(void (^)(UILocalNotification *))block;
 
 /// 发送本地通知
-- (void)sendLocalNotification;
+- (void)sendLocalNotificationWithMessage:(NSString *)m;
 
 @end
